@@ -72,7 +72,7 @@ func (ac *AccountContract) RetrieveAccount(APIstub shim.ChaincodeStubInterface, 
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
-	no := args[0]
+	//no := args[0]
 
 	account, err := APIstub.GetState(args[0])
 	if err != nil {
