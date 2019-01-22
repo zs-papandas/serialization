@@ -64,6 +64,26 @@ func (ac *AccountContract) CreateAccount(APIstub shim.ChaincodeStubInterface, ar
 
 // ListAccount : return a list of all accounts.
 func (ac *AccountContract) RetrieveAccount(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-	accountLogger.Infof("invoke RetrieveAccount")
-	return shim.Success([]byte("Reply from RetrieveAccount"))
+	
+	accountLogger.Infof("invoke RetrieveAccount, args=%s\n", args)
+
+	if len(args) != 1 {
+		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = ['no'], Actual = %s\n", args)
+		accountLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+	no := args[0]
+
+	account, err := APIstub.GetState(args[0])
+	if err != nil {
+		accountLogger.Error("Failed to get asset: %s with error: %s", args[0], err)
+		return shim.Error("Failed to get asset: %s with error: %s", args[0], err)
+	}
+	if value == nil {
+		accountLogger.Error("Asset not found: %s", args[0])
+		return shim.Error("Asset not found: %s", args[0])
+	}
+
+	return shim.Success(account)
+	//return shim.Success([]byte("Reply from RetrieveAccount"))
 }

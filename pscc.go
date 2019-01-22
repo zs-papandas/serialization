@@ -49,23 +49,6 @@ func (t *EntryPoint) Invoke(APIstub shim.ChaincodeStubInterface) peer.Response {
 	return shim.Error(msg)
 }
 
-// Get returns the value of the specified asset key
-/*func get(stub shim.ChaincodeStubInterface, args []string) (string, error) {
-	if len(args) != 1 {
-			return "", fmt.Errorf("Incorrect arguments. Expecting a key")
-	}
-
-	value, err := stub.GetState(args[0])
-	if err != nil {
-			return "", fmt.Errorf("Failed to get asset: %s with error: %s", args[0], err)
-	}
-	if value == nil {
-			return "", fmt.Errorf("Asset not found: %s", args[0])
-	}
-	return string(value), nil
-}*/
-
-
 // main function starts up the chaincode in the container during instantiate
 func main() {
 	if err := shim.Start(new(EntryPoint)); err != nil {
