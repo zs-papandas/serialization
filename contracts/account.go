@@ -25,8 +25,14 @@ type AccountContract struct {
 
 // ListAccount : return a list of all accounts.
 func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-	accountLogger.Infof("invoke ListAccount")
-	return string("XXXX"), nil
+	accountLogger.Infof("invoke ListAccount, args=%s\n", args)
+	if len(args) != 0 {
+		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = no argument, Actual = %s\n", args)
+		accountLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+	
+	return shim.Success([]byte("Reply from ListAccount"))
 }
 
 
@@ -59,5 +65,5 @@ func (ac *AccountContract) CreateAccount(APIstub shim.ChaincodeStubInterface, ar
 // ListAccount : return a list of all accounts.
 func (ac *AccountContract) RetrieveAccount(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	accountLogger.Infof("invoke RetrieveAccount")
-	return string("XXXX"), nil
+	return shim.Success([]byte("Reply from RetrieveAccount"))
 }
