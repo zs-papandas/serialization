@@ -76,12 +76,14 @@ func (ac *AccountContract) RetrieveAccount(APIstub shim.ChaincodeStubInterface, 
 
 	account, err := APIstub.GetState(args[0])
 	if err != nil {
-		accountLogger.Error("Failed to get asset: %s with error: %s", args[0], err)
-		return shim.Error("Failed to get asset: %s with error: %s", args[0], err)
+		errMsg1 := fmt.Sprintf("Failed to get asset: %s with error: %s", args[0], err)
+		accountLogger.Error(errMsg1)
+		return shim.Error(errMsg1)
 	}
 	if value == nil {
-		accountLogger.Error("Asset not found: %s", args[0])
-		return shim.Error("Asset not found: %s", args[0])
+		errMsg2 := fmt.Sprintf("Asset not found: %s", args[0])
+		accountLogger.Error(errMsg2)
+		return shim.Error(errMsg2)
 	}
 
 	return shim.Success(account)
