@@ -35,8 +35,6 @@ func (t *EntryPoint) Invoke(APIstub shim.ChaincodeStubInterface) peer.Response {
 
 	logger.Info("Query Function: %s\n", function)
 
-	var result string
-	var err error
 	switch function {
 		case "listAccount":
 			return accountContract.ListAccount(APIstub, args)
