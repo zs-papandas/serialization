@@ -14,7 +14,6 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 
-	"github.com/zs-papandas/serialization/contracts"
 	"github.com/zs-papandas/serialization/models"
 )
 

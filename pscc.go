@@ -19,7 +19,7 @@ type EntryPoint struct {
 
 
 // Init is called during chaincode instantiation to initialize any data.
-func (t *EntryPoint) Init(stub shim.ChaincodeStubInterface) peer.Response {
+func (t *EntryPoint) Init(APIstub shim.ChaincodeStubInterface) peer.Response {
 	logger.Info("Instantiated chaincode!!!")
 	return shim.Success(nil)
 }
