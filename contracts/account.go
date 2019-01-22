@@ -80,11 +80,11 @@ func (ac *AccountContract) RetrieveAccount(APIstub shim.ChaincodeStubInterface, 
 		accountLogger.Error(errMsg1)
 		return shim.Error(errMsg1)
 	}
-	if value == nil {
+	/*if value == nil {
 		errMsg2 := fmt.Sprintf("Asset not found: %s", args[0])
 		accountLogger.Error(errMsg2)
 		return shim.Error(errMsg2)
-	}
+	}*/
 
 	return shim.Success(account)
 	//return shim.Success([]byte("Reply from RetrieveAccount"))
