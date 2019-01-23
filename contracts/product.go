@@ -38,8 +38,15 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	lotnum := args[4]
 	status := "CREATED"
 	amt := args[5]
-	totqty := strconv.Atoi(args[6])
-	avaiqty := strconv.Atoi(args[6])
+	s := args[6]
+	i, err := strconv.Atoi(s)
+	if err != nil {
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", s)
+		productLogger.Error(errMsg)
+		return shim.Error(errMsg)
+    }
+	totqty := strconv.Atoi(i)
+	avaiqty := strconv.Atoi(i)
 
 	//SerialId Created Creator  Name Expire GTIN LotNumber Status Amount  TotalQty  AvailQty
 	var productInfo models.Product
