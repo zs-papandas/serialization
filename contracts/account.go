@@ -1,10 +1,3 @@
-/*
- Package contracts provides the smart contracts for Hyperledger/fabric 1.1.
-
- Copyright Nobuyuki Matsui<nobuyuki.matsui>.
-
- SPDX-License-Identifier: Apache-2.0
-*/
 package contracts
 
 import (
@@ -31,8 +24,48 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
+
+	query := map[string]interface{}{
+		"selector": map[string]interface{}{
+			"user_type": types.ManufacturerUser,
+		},
+	}
+
+	queryBytes, err := json.Marshal(query)
+	if err != nil {
+		accountLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+	accountLogger.Infof("Query string = '%s'", string(queryBytes))
+	resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+	if err != nil {
+		accountLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+	defer resultsIterator.Close()
+
+	results := make([]*models.Account, 0)
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			accountLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		account := new(models.Account)
+		if err := json.Unmarshal(queryResponse.Value, account); err != nil {
+			accountLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		results = append(results, account)
+	}
+	jsonBytes, err := json.Marshal(results)
+	if err != nil {
+		accountLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+	return shim.Success(jsonBytes)
 	
-	return shim.Success([]byte("Reply from ListAccount"))
+	//return shim.Success([]byte("Reply from ListAccount"))
 }
 
 
@@ -47,7 +80,7 @@ func (ac *AccountContract) CreateAccount(APIstub shim.ChaincodeStubInterface, ar
 	}
 
 	var personalInfo models.Account
- 	personalInfo = models.Account{args[1], args[2], args[3], args[4], args[5], args[6]}
+ 	personalInfo = models.Account{args[1], args[2], args[3], args[4], args[5], args[6], types.ManufacturerUser}
  	jsonBytes, err := json.Marshal(&personalInfo)
 	if err != nil {
 		accountLogger.Error(err.Error())

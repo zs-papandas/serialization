@@ -1,20 +1,14 @@
-/*
- Package models provides the model of state objects.
-
- Copyright Nobuyuki Matsui<nobuyuki.matsui>.
-
- SPDX-License-Identifier: Apache-2.0
-*/
 package models
 
 // Account: Account model
 type Account struct {
-	Firstname       string `json:"firstname"`
-	Lastname        string `json:"lastname"`
-	DOB             string `json:"DOB"`
-	Email           string `json:"email"`
-	Mobile          string `json:"mobile"`
-	Company         string `json:"company"`
+	Firstname	string 			`json:"firstname"`
+	Lastname    string 			`json:"lastname"`
+	DOB         string 			`json:"DOB"`
+	Email       string 			`json:"email"`
+	Mobile      string 			`json:"mobile"`
+	Company     string 			`json:"company"`
+	UserType 	types.UserType 	`json:"user_type"`
 }
 
 /*type ProductInfo struct {
