@@ -40,6 +40,8 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		UserTypeInt = types.UnKnownUser
 	}
 
+	accountLogger.Infof("UserTypeInt string = '%s'", string(UserTypeInt))
+
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
 			"email": "papan.das@zs.com",
