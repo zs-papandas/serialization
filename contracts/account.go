@@ -58,6 +58,7 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
+	accountLogger.Infof("Result Iterator = '%s'", string(resultsIterator))
 	defer resultsIterator.Close()
 
 	results := make([]*models.Account, 0)
