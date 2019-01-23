@@ -1,6 +1,11 @@
 package utils
 
-import "github.com/hyperledger/fabric/core/chaincode/shim"
+import (
+	"fmt"
+	"math/rand"
+
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+)
 
 var logger = shim.NewLogger("utils/serialnum_creator")
 
