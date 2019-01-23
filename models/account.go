@@ -1,5 +1,10 @@
 package models
 
+
+import (
+	"github.com/zs-papandas/serialization/types"
+)
+
 // Account: Account model
 type Account struct {
 	Firstname	string 			`json:"firstname"`
