@@ -30,7 +30,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	}
 
 	today := time.Now().Format(time.RFC3339)
-	no := "PRO" + today
+	no := "PS" + today
 	
 	creator := args[0]
 	name := args[1]
@@ -73,6 +73,20 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 func (ac *ProductContract) RetrieveProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke CreateProduct, args=%s\n", args)
 
-	return shim.Success([]byte("Reply from RetrieveProduct"))
+	if len(args) != 1 {
+		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = ['no'], Actual = %s\n", args)
+		accountLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+
+	product, err := APIstub.GetState(args[0])
+	if err != nil {
+		errMsg1 := fmt.Sprintf("Failed to get asset: %s with error: %s", args[0], err)
+		accountLogger.Error(errMsg1)
+		return shim.Error(errMsg1)
+	}
+
+	return shim.Success(product)
+	//return shim.Success([]byte("Reply from RetrieveProduct"))
 	
 }
