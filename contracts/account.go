@@ -53,7 +53,7 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 	}
 
 	accountLogger.Infof("Query string = '%s'", string(queryBytes))
-	/*resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+	resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
 	if err != nil {
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
@@ -79,9 +79,9 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	return shim.Success(jsonBytes)*/
+	return shim.Success(jsonBytes)
 	
-	return shim.Success([]byte("Reply from ListAccount"))
+	/*return shim.Success([]byte("Reply from ListAccount"))*/
 }
 
 
