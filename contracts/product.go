@@ -10,6 +10,7 @@ import (
 	sc "github.com/hyperledger/fabric/protos/peer"
 
 	"github.com/zs-papandas/serialization/models"
+	"github.com/zs-papandas/serialization/utils"
 
 )
 
@@ -29,9 +30,13 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(errMsg)
 	}
 
+	no, err := utils.GetAccountNo(APIstub)
+	if err != nil {
+		productLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
 	today := time.Now().Format(time.RFC3339)
-	no := "PS" + today
-	
+	//no := "PS" + today
 	creator := args[0]
 	name := args[1]
 	expired := args[2]
