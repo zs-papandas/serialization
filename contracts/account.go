@@ -70,7 +70,7 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		account := new(models.Account)
 		accountLogger.Infof("Query Response Key = '%s'", string(queryResponse.Key))
 		accountLogger.Infof("Query Response Value = '%s'", string(queryResponse.Value))
-		accountLogger.Infof("Query Response account = '%s'", string(account))
+		//accountLogger.Infof("Query Response account = '%s'", account)
 		if err := json.Unmarshal(queryResponse.Value, account); err != nil {
 			accountLogger.Error(err.Error())
 			return shim.Error(err.Error())
