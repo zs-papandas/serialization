@@ -1,10 +1,14 @@
 package contracts
 
 import (
+	"encoding/json"
 	"time"
+	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
+
+	"github.com/zs-papandas/serialization/models"
 
 )
 
@@ -19,7 +23,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	productLogger.Infof("invoke CreateProduct, args=%s\n", args)
 
 	if len(args) != 7 {
-		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = ['name'], Actual = %s\n", args)
+		errMsg := fmt.Sprintf("Incorrect number of arguments. %s\n", args)
 		productLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
