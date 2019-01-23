@@ -11,7 +11,7 @@ package models
 	UserType 	types.UserType 	`json:"user_type"`
 }*/
 
-type ProductInfo struct {
+type Product struct {
 	SerialId       	string 			`json:"serialid"`
 	Created        	string 			`json:"created"`
 	Creator    		string			`json:"creator"`
