@@ -1,9 +1,5 @@
 package types
 
-import (
-	"encoding/json"
-)
-
 const (
 	unknownUserStr = "unknown"
 	manufacturerUserStr = "manufacturer"
