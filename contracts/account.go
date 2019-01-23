@@ -58,7 +58,6 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	accountLogger.Infof("Result Iterator = '%s'", string(resultsIterator))
 	defer resultsIterator.Close()
 
 	results := make([]*models.Account, 0)
@@ -69,6 +68,9 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 			return shim.Error(err.Error())
 		}
 		account := new(models.Account)
+		accountLogger.Infof("Query Response Key = '%s'", string(queryResponse.Key))
+		accountLogger.Infof("Query Response Value = '%s'", string(queryResponse.Value))
+		accountLogger.Infof("Query Response account = '%s'", string(account))
 		if err := json.Unmarshal(queryResponse.Value, account); err != nil {
 			accountLogger.Error(err.Error())
 			return shim.Error(err.Error())
