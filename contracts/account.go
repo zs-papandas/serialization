@@ -42,7 +42,7 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
-			"user_type": UserTypeInt,
+			"email": "papan.das@zs.com",
 		},
 	}
 
@@ -138,7 +138,6 @@ func (ac *AccountContract) RetrieveAccount(APIstub shim.ChaincodeStubInterface, 
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
-	//no := args[0]
 
 	account, err := APIstub.GetState(args[0])
 	if err != nil {
@@ -146,11 +145,6 @@ func (ac *AccountContract) RetrieveAccount(APIstub shim.ChaincodeStubInterface, 
 		accountLogger.Error(errMsg1)
 		return shim.Error(errMsg1)
 	}
-	/*if value == nil {
-		errMsg2 := fmt.Sprintf("Asset not found: %s", args[0])
-		accountLogger.Error(errMsg2)
-		return shim.Error(errMsg2)
-	}*/
 
 	return shim.Success(account)
 	//return shim.Success([]byte("Reply from RetrieveAccount"))
