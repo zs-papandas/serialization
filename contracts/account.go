@@ -81,10 +81,18 @@ func (ac *AccountContract) CreateAccount(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(errMsg)
 	}
 
-	UserTypeInt, err := strconv.Atoi(args[7])
-	if err != nil {
-		accountLogger.Error("Failed to convert user account type into integer.")
-		return shim.Error("Failed to convert user account type into integer.")
+	var UserTypeInt types.UserType
+	switch args[7] {
+	case "manufacturer":
+		UserTypeInt = types.ManufacturerUser
+	case "wholesaler":
+		UserTypeInt = types.WholesalerUser
+	case "retailer":
+		UserTypeInt = types.RetailerUser
+	case "patient":
+		UserTypeInt = types.PatientUser
+	default:
+		UserTypeInt = types.UnKnownUser
 	}
 
 	var personalInfo models.Account

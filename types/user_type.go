@@ -8,10 +8,10 @@ const (
 	patientUserStr = "patient"
 )
 
-// ModelType : model type
+// UserType : user type
 type UserType int
 
-// concrete ModelType
+// concrete UserType
 const (
 	UnKnownUser UserType = iota
 	ManufacturerUser
