@@ -8,7 +8,6 @@ import (
 	sc "github.com/hyperledger/fabric/protos/peer"
 
 	"github.com/zs-papandas/serialization/models"
-	"github.com/zs-papandas/serialization/types"
 )
 
 var productLogger = shim.NewLogger("contracts/product")
