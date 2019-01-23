@@ -3,6 +3,7 @@ package contracts
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
@@ -80,8 +81,14 @@ func (ac *AccountContract) CreateAccount(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(errMsg)
 	}
 
+	UserTypeInt, err := strconv.Atoi(args[7])
+	if err != nil {
+		accountLogger.Error("Failed to convert user account type into integer.")
+		return shim.Error("Failed to convert user account type into integer.")
+	}
+
 	var personalInfo models.Account
- 	personalInfo = models.Account{args[1], args[2], args[3], args[4], args[5], args[6], args[7]}
+ 	personalInfo = models.Account{args[1], args[2], args[3], args[4], args[5], args[6], UserTypeInt}
  	jsonBytes, err := json.Marshal(&personalInfo)
 	if err != nil {
 		accountLogger.Error(err.Error())
