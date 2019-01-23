@@ -29,8 +29,9 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(errMsg)
 	}
 
-	no := "PRO" + time.Now().String()
-	today := time.Now().String()
+	today := time.Now().Format(time.RFC3339)
+	no := "PRO" + today
+	
 	creator := args[0]
 	name := args[1]
 	expired := args[2]
