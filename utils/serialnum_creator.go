@@ -34,7 +34,7 @@ func getRandomString(n int, letterBytes string) string {
 func GetSerialNo(APIstub shim.ChaincodeStubInterface) (string, error) {
 	var no string
 	for {
-		no = getRandomString(16, "0123456789")
+		no = getRandomString(16, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 		existing, err := APIstub.GetState(no)
 		if err != nil {
 			logger.Error(fmt.Sprintf("APIstub.GetState Error. error = %s\n", err))
