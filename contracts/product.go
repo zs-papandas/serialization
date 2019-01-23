@@ -30,7 +30,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(errMsg)
 	}
 
-	no, err := utils.GetAccountNo(APIstub)
+	no, err := utils.GetSerialNo(APIstub)
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
