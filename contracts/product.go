@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"time"
 	"fmt"
+	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
@@ -37,8 +38,8 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	lotnum := args[4]
 	status := "CREATED"
 	amt := args[5]
-	totqty := args[6]
-	avaiqty := args[6]
+	totqty := strconv.Atoi(args[6])
+	avaiqty := strconv.Atoi(args[6])
 
 	//SerialId Created Creator  Name Expire GTIN LotNumber Status Amount  TotalQty  AvailQty
 	var productInfo models.Product
