@@ -20,15 +20,29 @@ type AccountContract struct {
 // ListAccount : return a list of all accounts.
 func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	accountLogger.Infof("invoke ListAccount, args=%s\n", args)
-	if len(args) != 0 {
+	if len(args) != 1 {
 		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = no argument, Actual = %s\n", args)
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
 
+	var UserTypeInt types.UserType
+	switch args[0] {
+	case "manufacturer":
+		UserTypeInt = types.ManufacturerUser
+	case "wholesaler":
+		UserTypeInt = types.WholesalerUser
+	case "retailer":
+		UserTypeInt = types.RetailerUser
+	case "patient":
+		UserTypeInt = types.PatientUser
+	default:
+		UserTypeInt = types.UnKnownUser
+	}
+
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
-			"user_type": types.ManufacturerUser,
+			"user_type": UserTypeInt,
 		},
 	}
 
@@ -37,8 +51,9 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
+
 	accountLogger.Infof("Query string = '%s'", string(queryBytes))
-	resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+	/*resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
 	if err != nil {
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
@@ -64,9 +79,9 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	return shim.Success(jsonBytes)
+	return shim.Success(jsonBytes)*/
 	
-	//return shim.Success([]byte("Reply from ListAccount"))
+	return shim.Success([]byte("Reply from ListAccount"))
 }
 
 
