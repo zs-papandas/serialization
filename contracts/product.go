@@ -14,7 +14,7 @@ type ProductContract struct {
 }
 
 //CreateProduct : save a product
-func (ac *AccountContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	accountLogger.Infof("invoke CreateProduct, args=%s\n", args)
 
 	
@@ -23,7 +23,7 @@ func (ac *AccountContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 }
 
 // RetrieveProduct : return a product.
-func (ac *AccountContract) RetrieveProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (ac *ProductContract) RetrieveProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	accountLogger.Infof("invoke CreateProduct, args=%s\n", args)
 
 	return shim.Success([]byte("Reply from RetrieveProduct"))
