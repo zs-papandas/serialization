@@ -41,7 +41,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	myStr := args[6]
 	myInt, err := strconv.Atoi(myStr)
 	if err != nil {
-        errMsg := fmt.Sprintf("Failed: string to int. %s\n", s)
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
 		productLogger.Error(errMsg)
 		return shim.Error(errMsg)
     }
