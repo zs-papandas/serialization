@@ -12,6 +12,7 @@ import (
 var logger = shim.NewLogger("main")
 
 var accountContract = new(contracts.AccountContract)
+var productContract = new(contracts.ProductContract)
 
 // EntryPoint implements a simple chaincode to manage an asset
 type EntryPoint struct {
@@ -42,6 +43,10 @@ func (t *EntryPoint) Invoke(APIstub shim.ChaincodeStubInterface) peer.Response {
 			return accountContract.CreateAccount(APIstub, args)
 		case "retrieveAccount":
 			return accountContract.RetrieveAccount(APIstub, args)
+		case "createProduct":
+			return productContract.CreateProduct(APIstub, args)
+		case "retrieveProduct":
+			return productContract.RetrieveProduct(APIstub, args)
 	}
 
 	msg := fmt.Sprintf("No such function. function = %s, args = %s", function, args)
