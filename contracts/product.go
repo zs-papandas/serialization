@@ -1,13 +1,10 @@
 package contracts
 
 import (
-	"encoding/json"
-	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 
-	"github.com/zs-papandas/serialization/models"
 )
 
 var productLogger = shim.NewLogger("contracts/product")
