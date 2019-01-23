@@ -74,14 +74,14 @@ func (ac *AccountContract) ListAccount(APIstub shim.ChaincodeStubInterface, args
 func (ac *AccountContract) CreateAccount(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	accountLogger.Infof("invoke CreateAccount, args=%s\n", args)
 
-	if len(args) != 7 {
+	if len(args) != 8 {
 		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = ['name'], Actual = %s\n", args)
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
 
 	var personalInfo models.Account
- 	personalInfo = models.Account{args[1], args[2], args[3], args[4], args[5], args[6], types.ManufacturerUser}
+ 	personalInfo = models.Account{args[1], args[2], args[3], args[4], args[5], args[6], args[7]}
  	jsonBytes, err := json.Marshal(&personalInfo)
 	if err != nil {
 		accountLogger.Error(err.Error())
