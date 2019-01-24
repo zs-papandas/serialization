@@ -115,7 +115,7 @@ func (ac *ProductContract) RetrieveProduct(APIstub shim.ChaincodeStubInterface, 
 func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke ChangeOwner, args=%s\n", args)
 
-	if len(args) != 1 {
+	if len(args) != 2 {
 		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = ['no'], Actual = %s\n", args)
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
