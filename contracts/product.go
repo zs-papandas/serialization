@@ -151,21 +151,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	productLogger.Infof(toProduct.SerialId)
 	productLogger.Infof(toOwner.Firstname)
 
-	/*toProductState := &models.Product{
-		SerialId:		toProduct.SerialId,
-		Created:       	toProduct.Created,
-		Owner:          *toOwner,
-		Name:           toProduct.Name,
-		Expire:         toProduct.Expire,
-		GTIN:           toProduct.GTIN,
-		LotNumber:      toProduct.LotNumber,
-		Status:         "OWNER_CHANGED",
-		Amount:         toProduct.Amount,
-		TotalQty:       toProduct.TotalQty,
-		AvailQty:       toProduct.AvailQty,
-	}*/
-
 	toProduct.Owner = *toOwner
+	toProduct.Status = "OWNERSHIP_CHANGED"
 
 	toProductBytes, err := json.Marshal(toProduct)
 	if err != nil {
@@ -178,18 +165,5 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	}
 
 	return shim.Success(toProductBytes)
-	
-	/*serialId := args[0]
-	toOwner := args[1]
-
-	product, err := APIstub.GetState(args[0])
-	if err != nil {
-		errMsg1 := fmt.Sprintf("Failed to get asset: %s with error: %s", args[0], err)
-		accountLogger.Error(errMsg1)
-		return shim.Error(errMsg1)
-	}*/
-
-	//return shim.Success(product)
-	//return shim.Success([]byte("Reply from ChangeOwner"))
 	
 }
