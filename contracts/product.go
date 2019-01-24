@@ -42,10 +42,10 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	if err != nil {
 		switch e := err.(type) {
 		case *utils.WarningResult:
-			eventLogger.Warning(err.Error())
+			productLogger.Warning(err.Error())
 			return shim.Success(e.JSONBytes())
 		default:
-			eventLogger.Error(err.Error())
+			productLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
 	}
