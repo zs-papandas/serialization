@@ -45,7 +45,8 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
-	creator := shim.Success(account)
+	productLogger.Infof("User Account %s\n", account)
+	creator := args[0]
 	name := args[1]
 	expired := args[2]
 	gtin := args[3]
