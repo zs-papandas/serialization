@@ -38,15 +38,20 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	today := time.Now().Format(time.RFC3339)
 	
 	// GET USER ACCOUNT DETAIL
-	var account models.Account
-	account, err := APIstub.GetState(args[0])
+	toAccount, err := utils.GetAccount(APIstub, args[0])
 	if err != nil {
-		errMsg := fmt.Sprintf("Failed to get Account: %s with error: %s", args[0], err)
-		accountLogger.Error(errMsg)
-		return shim.Error(errMsg)
+		switch e := err.(type) {
+		case *utils.WarningResult:
+			eventLogger.Warning(err.Error())
+			return shim.Success(e.JSONBytes())
+		default:
+			eventLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
 	}
-	productLogger.Infof("User Account %s\n", account)
-	creator := args[0]
+
+	productLogger.Infof("User Account %s\n", toAccount)
+	creator := toAccount
 	name := args[1]
 	expired := args[2]
 	gtin := args[3]
@@ -102,5 +107,32 @@ func (ac *ProductContract) RetrieveProduct(APIstub shim.ChaincodeStubInterface, 
 
 	return shim.Success(product)
 	//return shim.Success([]byte("Reply from RetrieveProduct"))
+	
+}
+
+
+// ChangeOwner : Change owner of a product.
+func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	productLogger.Infof("invoke ChangeOwner, args=%s\n", args)
+
+	if len(args) != 1 {
+		errMsg := fmt.Sprintf("Incorrect number of arguments. Expecting = ['no'], Actual = %s\n", args)
+		accountLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+
+	
+	/*serialId := args[0]
+	toOwner := args[1]
+
+	product, err := APIstub.GetState(args[0])
+	if err != nil {
+		errMsg1 := fmt.Sprintf("Failed to get asset: %s with error: %s", args[0], err)
+		accountLogger.Error(errMsg1)
+		return shim.Error(errMsg1)
+	}*/
+
+	//return shim.Success(product)
+	return shim.Success([]byte("Reply from ChangeOwner"))
 	
 }

@@ -6,7 +6,7 @@ package models
 type Product struct {
 	SerialId       	string 			`json:"serialid"`
 	Created        	string 			`json:"created"`
-	Owner    		string			`json:"owner"`
+	Owner    		Account			`json:"owner"`
 	Name           	string 			`json:"name"`
 	Expire          string 			`json:"expire"`
 	GTIN         	string 			`json:"gtin"`

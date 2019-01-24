@@ -47,6 +47,8 @@ func (t *EntryPoint) Invoke(APIstub shim.ChaincodeStubInterface) peer.Response {
 			return productContract.CreateProduct(APIstub, args)
 		case "retrieveProduct":
 			return productContract.RetrieveProduct(APIstub, args)
+		case "changeOwner":
+			return productContract.ChangeOwner(APIstub, args)
 	}
 
 	msg := fmt.Sprintf("No such function. function = %s, args = %s", function, args)
