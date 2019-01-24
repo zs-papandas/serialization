@@ -1,12 +1,12 @@
 package models
 
-//import "github.com/zs-papandas/serialization/models"
+import "github.com/zs-papandas/serialization/models"
 
 // Product: Product model
 type Product struct {
 	SerialId       	string 			`json:"serialid"`
 	Created        	string 			`json:"created"`
-	Creator    		string			`json:"creator"`
+	Creator    		models.Account	`json:"creator"`
 	Name           	string 			`json:"name"`
 	Expire          string 			`json:"expire"`
 	GTIN         	string 			`json:"gtin"`
