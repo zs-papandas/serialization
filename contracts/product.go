@@ -64,7 +64,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 
 	//SerialId Created Creator  Name Expire GTIN LotNumber Status Amount  TotalQty  AvailQty
 	var productInfo models.Product
-	productInfo = models.Product{no, today, &creator, name, expired, gtin, lotnum, status, amt, totqty, avaiqty}
+	productInfo = models.Product{no, today, string(creator), name, expired, gtin, lotnum, status, amt, totqty, avaiqty}
  	jsonBytes, err := json.Marshal(&productInfo)
 	if err != nil {
 		productLogger.Error(err.Error())
