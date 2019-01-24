@@ -1,6 +1,6 @@
 package models
 
-import "github.com/zs-papandas/serialization/models"
+//import "github.com/zs-papandas/serialization/models"
 
 // Product: Product model
 type Product struct {
