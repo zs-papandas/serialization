@@ -34,6 +34,23 @@ func GetAccount(APIstub shim.ChaincodeStubInterface, no string) (*models.Account
 	return account, nil
 }
 
+// GetAccount : get an account from state db using account no.
+func GetProduct(APIstub shim.ChaincodeStubInterface, no string) (*models.Product, error) {
+	var product = new(models.Product)
+	productBytes, err := APIstub.GetState(no)
+	if err != nil {
+		return product, err
+	} else if productBytes == nil {
+		msg := fmt.Sprintf("Product does not exist, no = %s", no)
+		warning := &WarningResult{StatusCode: 404, Message: msg}
+		return product, warning
+	}
+	if err := json.Unmarshal(productBytes, product); err != nil {
+		return product, err
+	}
+	return product, nil
+}
+
 // GetAmount : convert amount to int and validate it
 func GetAmount(amountStr string) (int, error) {
 	var amount int

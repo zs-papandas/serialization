@@ -38,7 +38,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	today := time.Now().Format(time.RFC3339)
 	
 	// GET USER ACCOUNT DETAIL
-	toAccount, err := utils.GetAccount(APIstub, args[0])
+	owner, err := utils.GetAccount(APIstub, args[0])
 	if err != nil {
 		switch e := err.(type) {
 		case *utils.WarningResult:
@@ -50,8 +50,8 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 		}
 	}
 
-	productLogger.Infof("User Account %s\n", toAccount)
-	creator := *toAccount
+	productLogger.Infof("User Account %s\n", owner.Firstname)
+	
 	name := args[1]
 	expired := args[2]
 	gtin := args[3]
@@ -70,7 +70,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 
 	//SerialId Created Creator  Name Expire GTIN LotNumber Status Amount  TotalQty  AvailQty
 	var productInfo models.Product
-	productInfo = models.Product{no, today, creator, name, expired, gtin, lotnum, status, amt, totqty, avaiqty}
+	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty}
  	jsonBytes, err := json.Marshal(&productInfo)
 	if err != nil {
 		productLogger.Error(err.Error())
@@ -120,6 +120,35 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		accountLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
+
+
+	product, err := utils.GetProduct(APIstub, args[0])
+	if err != nil {
+		switch e := err.(type) {
+		case *utils.WarningResult:
+			productLogger.Warning(err.Error())
+			return shim.Success(e.JSONBytes())
+		default:
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+	}
+
+	toOwner, err := utils.GetAccount(APIstub, args[1])
+	if err != nil {
+		switch e := err.(type) {
+		case *utils.WarningResult:
+			productLogger.Warning(err.Error())
+			return shim.Success(e.JSONBytes())
+		default:
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+	}
+
+	productLogger.Infof("Product LotNumber")
+	productLogger.Infof(*product.LotNumber)
+	productLogger.Infof(product.LotNumber)
 
 	
 	/*serialId := args[0]
