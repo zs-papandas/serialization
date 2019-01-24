@@ -37,7 +37,14 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	}
 	today := time.Now().Format(time.RFC3339)
 	//no := "PS" + today
-	creator := args[0]
+	var creator models.Account
+	creator, err := APIstub.GetState(args[0])
+	if err != nil {
+		errMsg := fmt.Sprintf("Failed to get Account: %s with error: %s", args[0], err)
+		accountLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+	//creator := args[0]
 	name := args[1]
 	expired := args[2]
 	gtin := args[3]
