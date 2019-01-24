@@ -2,21 +2,11 @@ package models
 
 import "github.com/zs-papandas/serialization/models"
 
-// Account: Account model
-/*type Account struct {
-	Firstname	string 			`json:"firstname"`
-	Lastname    string 			`json:"lastname"`
-	DOB         string 			`json:"DOB"`
-	Email       string 			`json:"email"`
-	Mobile      string 			`json:"mobile"`
-	Company     string 			`json:"company"`
-	UserType 	types.UserType 	`json:"user_type"`
-}*/
-
+// Product: Product model
 type Product struct {
 	SerialId       	string 			`json:"serialid"`
 	Created        	string 			`json:"created"`
-	Creator    		Account			`json:"creator"`
+	Creator    		models.Account	`json:"creator"`
 	Name           	string 			`json:"name"`
 	Expire          string 			`json:"expire"`
 	GTIN         	string 			`json:"gtin"`

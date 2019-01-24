@@ -16,15 +16,3 @@ type Account struct {
 	UserType 	types.UserType 	`json:"user_type"`
 }
 
-/*type ProductInfo struct {
-	SerialId       	string 			`json:"serialid"`
-	Created        	string 			`json:"created"`
-	Creator    		PersonalInfo	`json:"creator"`
-	Name           	string 			`json:"name"`
-	Expire          string 			`json:"expire"`
-	GTIN         	string 			`json:"gtin"`
-	LotNumber       string 			`json:"lotnumber"`
-	Status         	string 			`json:"status"`
-	TotalQty        int 			`json:"totalqty"`
-	AvailQty        int 			`json:"availqty"`
-}*/
