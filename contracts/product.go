@@ -122,7 +122,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	}
 
 
-	product, err := utils.GetProduct(APIstub, args[0])
+	toProduct, err := utils.GetProduct(APIstub, args[0])
 	if err != nil {
 		switch e := err.(type) {
 		case *utils.WarningResult:
@@ -148,10 +148,36 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 
 	productLogger.Infof("Product LotNumber")
 	//productLogger.Infof(*product.LotNumber)
-	productLogger.Infof(product.LotNumber)
+	productLogger.Infof(toProduct.SerialId)
 	productLogger.Infof(toOwner.Firstname)
 
+	/*toProductState := &models.Product{
+		SerialId:		toProduct.SerialId,
+		Created:       	toProduct.Created,
+		Owner:          *toOwner,
+		Name:           toProduct.Name,
+		Expire:         toProduct.Expire,
+		GTIN:           toProduct.GTIN,
+		LotNumber:      toProduct.LotNumber,
+		Status:         "OWNER_CHANGED",
+		Amount:         toProduct.Amount,
+		TotalQty:       toProduct.TotalQty,
+		AvailQty:       toProduct.AvailQty,
+	}*/
 
+	toProduct.Owner = *toOwner
+
+	toProductBytes, err := json.Marshal(toProduct)
+	if err != nil {
+		eventLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+	if err := APIstub.PutState(toProduct.SerialId, toProductBytes); err != nil {
+		eventLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(toProductBytes)
 	
 	/*serialId := args[0]
 	toOwner := args[1]
@@ -164,6 +190,6 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	}*/
 
 	//return shim.Success(product)
-	return shim.Success([]byte("Reply from ChangeOwner"))
+	//return shim.Success([]byte("Reply from ChangeOwner"))
 	
 }
