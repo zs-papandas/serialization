@@ -149,6 +149,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	productLogger.Infof("Product LotNumber")
 	//productLogger.Infof(*product.LotNumber)
 	productLogger.Infof(product.LotNumber)
+	productLogger.Infof(toOwner.Firstname)
+
 
 	
 	/*serialId := args[0]
