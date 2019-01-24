@@ -169,11 +169,11 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 
 	toProductBytes, err := json.Marshal(toProduct)
 	if err != nil {
-		eventLogger.Error(err.Error())
+		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
 	if err := APIstub.PutState(toProduct.SerialId, toProductBytes); err != nil {
-		eventLogger.Error(err.Error())
+		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
 
