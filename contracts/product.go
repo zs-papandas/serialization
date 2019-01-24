@@ -36,7 +36,8 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(err.Error())
 	}
 	today := time.Now().Format(time.RFC3339)
-	//no := "PS" + today
+	
+	// GET USER ACCOUNT DETAIL
 	var creator models.Account
 	creator, err := APIstub.GetState(args[0])
 	if err != nil {
@@ -63,7 +64,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 
 	//SerialId Created Creator  Name Expire GTIN LotNumber Status Amount  TotalQty  AvailQty
 	var productInfo models.Product
-	productInfo = models.Product{no, today, creator, name, expired, gtin, lotnum, status, amt, totqty, avaiqty}
+	productInfo = models.Product{no, today, *creator, name, expired, gtin, lotnum, status, amt, totqty, avaiqty}
  	jsonBytes, err := json.Marshal(&productInfo)
 	if err != nil {
 		productLogger.Error(err.Error())
