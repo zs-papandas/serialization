@@ -51,7 +51,7 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	}
 
 	productLogger.Infof("User Account %s\n", toAccount)
-	creator := &toAccount
+	creator := *toAccount
 	name := args[1]
 	expired := args[2]
 	gtin := args[3]
