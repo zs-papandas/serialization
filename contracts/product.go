@@ -9,11 +9,11 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 	//"github.com/hyperledger/fabric/core/scc/qscc"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
+	//"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
 
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	sdkCtx "github.com/hyperledger/fabric-sdk-go/pkg/context"
+	//"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
+	//sdkCtx "github.com/hyperledger/fabric-sdk-go/pkg/context"
 	"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
 
 	"github.com/zs-papandas/serialization/models"
@@ -192,6 +192,17 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	return shim.Success(toProductBytes)
 	
 }
+
+
+func mockChannelProvider(channelID string) context.ChannelProvider {
+
+	channelProvider := func() (context.Channel, error) {
+		return mocks.NewMockChannel(channelID)
+	}
+
+	return channelProvider
+}
+
 
 
 // ChangeOwner : Change owner of a product.
