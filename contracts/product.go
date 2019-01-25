@@ -167,3 +167,11 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	return shim.Success(toProductBytes)
 	
 }
+
+
+// ChangeOwner : Change owner of a product.
+func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
+
+	return shim.Success([]byte("Reply from TestQueryInfo"))
+}
