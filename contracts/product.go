@@ -202,7 +202,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 
 	
 
-	response, err := APIstub.Query(APIstub.Request{ChaincodeID: "qscc", Fcn: "invoke", Args: integration.ExampleCCQueryArgs("GetChainInfo")})
+	response, err := chClient.Query(chClient.Request{ChaincodeID: "qscc", Fcn: "invoke", Args: integration.ExampleCCQueryArgs("GetChainInfo")})
 
 	if err != nil {
 		productLogger.Error(err.Error())
