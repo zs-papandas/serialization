@@ -7,7 +7,7 @@ import (
 )
 
 func main(){
-	scanner := bufio.NewScanner(os.Studio)
+	scanner := bufio.NewScanner(os.Stdin)
 
 	low := 1
 	high := 100
