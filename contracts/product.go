@@ -9,6 +9,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 	//"github.com/hyperledger/fabric/core/scc/qscc"
+	"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
 
 	"github.com/zs-papandas/serialization/models"
 	"github.com/zs-papandas/serialization/utils"
@@ -174,6 +175,20 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
+	c, err := New(mockChannelProvider("mychannel"))
+	if err != nil {
+		fmt.Println("failed to create client")
+	}
+
+	bci, err := c.QueryInfo()
+	if err != nil {
+		fmt.Printf("failed to query for blockchain info: %s\n", err)
+	}
+
+	if bci != nil {
+		fmt.Println("Retrieved ledger info")
+	}
+
 	/*client, err := ledger.New(channelContext)
 	if err != nil {
 		productLogger.Error(err.Error())
@@ -198,7 +213,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
-	}*/
+	}
 
 	
 
@@ -210,7 +225,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}
 
 	productLogger.Infof("PASS THE TSTs")
-	productLogger.Infof(response)
+	productLogger.Infof(response)*/
 
 	return shim.Success([]byte("Reply from TestQueryInfo"))
 }
