@@ -9,7 +9,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 	//"github.com/hyperledger/fabric/core/scc/qscc"
-	//"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
+	"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
 
 	//"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
@@ -210,7 +210,7 @@ func mockChannelProvider(channelID string) context.ChannelProvider {
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
-	c, err := mockChannelProvider("myc")
+	c, err := ledger.New(mockChannelProvider("myc"))
 	if err != nil {
 		fmt.Println("failed to create client")
 	}
