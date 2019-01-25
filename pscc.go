@@ -38,6 +38,7 @@ func (t *EntryPoint) Invoke(APIstub shim.ChaincodeStubInterface) peer.Response {
 	logger.Info("Query Function: %s\n", function)
 
 	switch function {
+		// not in use
 		case "listAccount":
 			return accountContract.ListAccount(APIstub, args)
 		case "createAccount":

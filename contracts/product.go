@@ -175,7 +175,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
-	c, err := New(mockChannelProvider("mychannel"))
+	c, err := New(mockChannelProvider("myc"))
 	if err != nil {
 		fmt.Println("failed to create client")
 	}
