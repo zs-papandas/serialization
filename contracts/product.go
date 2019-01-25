@@ -190,7 +190,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
-	}*/
+	}
 
 
 	//res, err := qscc.Invoke([][]byte([]byte(GetChainInfo), []byte(myc)))
@@ -201,7 +201,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}
 
 	productLogger.Infof("PASS THE TSTs")
-	productLogger.Infof(res)
+	productLogger.Infof(res)*/
 
 	return shim.Success([]byte("Reply from TestQueryInfo"))
 }
