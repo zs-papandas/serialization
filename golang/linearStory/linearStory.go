@@ -1,10 +1,6 @@
 package main
 
-import (
-	"bufio"
-	"fmt"
-	"os"
-)
+import "fmt"
 
 // LINKED LIST
 
@@ -19,7 +15,7 @@ func playStory(page *storyPage){
 	}
 
 	fmt.Println(page.text)
-	page.playStory(page.nextPage)
+	playStory(page.nextPage)
 }
 
 func main()  {
