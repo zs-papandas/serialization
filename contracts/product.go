@@ -9,13 +9,13 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
 	//"github.com/hyperledger/fabric/core/scc/qscc"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
+	//"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
 
 	//"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
+	//"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
 	//"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
 	//sdkCtx "github.com/hyperledger/fabric-sdk-go/pkg/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
+	//"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
 
 	"github.com/zs-papandas/serialization/models"
 	"github.com/zs-papandas/serialization/types"
@@ -210,7 +210,7 @@ func mockChannelProvider(channelID string) context.ChannelProvider {
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
-	c, err := ledger.New(mockChannelProvider("myc")
+	/*c, err := ledger.New(mockChannelProvider("myc")
 	if err != nil {
 		fmt.Println("failed to create client")
 	}
@@ -224,7 +224,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		fmt.Println("Retrieved ledger info")
 	}
 
-	/*client, err := ledger.New(channelContext)
+	client, err := ledger.New(channelContext)
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
