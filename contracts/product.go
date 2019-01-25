@@ -210,7 +210,7 @@ func mockChannelProvider(channelID string) context.ChannelProvider {
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
-	c, err := ledger.New(mockChannelProvider("myc"))
+	c, err := ledger.New(mockChannelProvider("myc")
 	if err != nil {
 		fmt.Println("failed to create client")
 	}
