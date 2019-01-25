@@ -11,6 +11,7 @@ import (
 	//"github.com/hyperledger/fabric/core/scc/qscc"
 	//"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
 
+	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
 	//"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
 	//sdkCtx "github.com/hyperledger/fabric-sdk-go/pkg/context"
