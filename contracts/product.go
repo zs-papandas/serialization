@@ -198,10 +198,19 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
+	}*/
+
+	
+
+	response, err := APIstub.Query(APIstub.Request{ChaincodeID: "qscc", Fcn: "invoke", Args: integration.ExampleCCQueryArgs("GetChainInfo")})
+
+	if err != nil {
+		productLogger.Error(err.Error())
+		return shim.Error(err.Error())
 	}
 
 	productLogger.Infof("PASS THE TSTs")
-	productLogger.Infof(res)*/
+	productLogger.Infof(response)
 
 	return shim.Success([]byte("Reply from TestQueryInfo"))
 }
