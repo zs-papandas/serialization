@@ -8,6 +8,7 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
+	"github.com/hyperledger/fabric/core/scc/qscc"
 
 	"github.com/zs-papandas/serialization/models"
 	"github.com/zs-papandas/serialization/utils"
@@ -173,7 +174,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
-	client, err := ledger.New(channelContext)
+	/*client, err := ledger.New(channelContext)
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
@@ -189,7 +190,17 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
+	}*/
+
+
+	res, err := qscc.Invoke([][]byte([]byte(GetChainInfo), []byte(myc)))
+	if err != nil {
+		productLogger.Error(err.Error())
+		return shim.Error(err.Error())
 	}
+
+	productLogger.Infof("PASS THE TSTs")
+	productLogger.Infof(res)
 
 	return shim.Success([]byte("Reply from TestQueryInfo"))
 }
