@@ -21,7 +21,7 @@ const (
 )
 
 // String : Stringer interface
-func (t UserType) String() string {
+func (t ProductType) String() string {
 	switch t {
 	case PalletProduct:
 		return palletProductStr
