@@ -32,6 +32,6 @@ func (t ProductType) String() string {
 	case ItemProduct:
 		return itemProductStr
 	default:
-		return unknownUserStr
+		return unknownProductStr
 	}
 }
