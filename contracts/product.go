@@ -8,7 +8,7 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
-	"github.com/hyperledger/fabric/core/scc/qscc"
+	//"github.com/hyperledger/fabric/core/scc/qscc"
 
 	"github.com/zs-papandas/serialization/models"
 	"github.com/zs-papandas/serialization/utils"
