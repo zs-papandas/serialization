@@ -26,7 +26,7 @@ type ProductContract struct {
 func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke CreateProduct, args=%s\n", args)
 
-	if len(args) != 7 {
+	if len(args) != 9 {
 		errMsg := fmt.Sprintf("Incorrect number of arguments. %s\n", args)
 		productLogger.Error(errMsg)
 		return shim.Error(errMsg)
@@ -70,9 +70,26 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	totqty := myInt
 	avaiqty := myInt
 
+	// Get the Product Type
+	var ProductTypeInt types.ProductType
+	switch args[7] {
+	case "pallet":
+		ProductTypeInt = types.PalletProduct
+	case "box":
+		ProductTypeInt = types.BoxProduct
+	case "packet":
+		ProductTypeInt = types.PacketProduct
+	case "item":
+		ProductTypeInt = types.ItemProduct
+	default:
+		ProductTypeInt = types.UnKnownProduct
+	}
+
+	parentProduct := args[8]
+
 	//SerialId Created Creator  Name Expire GTIN LotNumber Status Amount  TotalQty  AvailQty
 	var productInfo models.Product
-	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty}
+	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
  	jsonBytes, err := json.Marshal(&productInfo)
 	if err != nil {
 		productLogger.Error(err.Error())
