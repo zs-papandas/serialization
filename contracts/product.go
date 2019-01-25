@@ -173,5 +173,23 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
+	client, err := ledger.New(channelContext)
+	if err != nil {
+		productLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+
+	block, err := client.QueryBlockByHash(blockHash)
+	if err != nil {
+		productLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+
+	block, err = client.QueryBlock(blockNumber)
+	if err != nil {
+		productLogger.Error(err.Error())
+		return shim.Error(err.Error())
+	}
+
 	return shim.Success([]byte("Reply from TestQueryInfo"))
 }
