@@ -193,7 +193,8 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}*/
 
 
-	res, err := qscc.Invoke([][]byte([]byte(GetChainInfo), []byte(myc)))
+	//res, err := qscc.Invoke([][]byte([]byte(GetChainInfo), []byte(myc)))
+	res, err := qscc.invoke("GetChainInfo", "myc")
 	if err != nil {
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
