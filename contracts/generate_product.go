@@ -15,7 +15,7 @@ import (
 
 )
 
-var productLogger = shim.NewLogger("contracts/generate_product")
+var generateProductLogger = shim.NewLogger("contracts/generate_product")
 
 // GenerateProductContract : a struct to handle auto generate Product.
 type GenerateProductContract struct {
@@ -23,17 +23,17 @@ type GenerateProductContract struct {
 
 //CreateProduct : save a product
 func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-	productLogger.Infof("invoke Generate Product -> CreateProduct, args=%s\n", args)
+	generateProductLogger.Infof("invoke Generate Product -> CreateProduct, args=%s\n", args)
 
 	if len(args) != 9 {
 		errMsg := fmt.Sprintf("Incorrect number of arguments. %s\n", args)
-		productLogger.Error(errMsg)
+		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
 
 	no, err := utils.GetSerialNo(APIstub)
 	if err != nil {
-		productLogger.Error(err.Error())
+		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
 	today := time.Now().Format(time.RFC3339)
@@ -43,15 +43,15 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	if err != nil {
 		switch e := err.(type) {
 		case *utils.WarningResult:
-			productLogger.Warning(err.Error())
+			generateProductLogger.Warning(err.Error())
 			return shim.Success(e.JSONBytes())
 		default:
-			productLogger.Error(err.Error())
+			generateProductLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
 	}
 
-	productLogger.Infof("User Account %s\n", owner.Firstname)
+	generateProductLogger.Infof("User Account %s\n", owner.Firstname)
 	
 	name := args[1]
 	expired := args[2]
@@ -63,7 +63,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	myInt, err := strconv.Atoi(myStr)
 	if err != nil {
         errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
-		productLogger.Error(errMsg)
+		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
     }
 	totqty := myInt
@@ -91,12 +91,12 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
  	jsonBytes, err := json.Marshal(&productInfo)
 	if err != nil {
-		productLogger.Error(err.Error())
+		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
 
 	if err := APIstub.PutState(no, jsonBytes); err != nil {
-		productLogger.Error(err.Error())
+		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
 	return shim.Success(jsonBytes)
