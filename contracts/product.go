@@ -93,8 +93,8 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 	}
 
 	parentProduct := args[8]
+	
 
-	//SerialId Created Creator  Name Expire GTIN LotNumber Status Amount  TotalQty  AvailQty
 	var productInfo models.Product
 	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
  	jsonBytes, err := json.Marshal(&productInfo)
@@ -108,9 +108,6 @@ func (ac *ProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(err.Error())
 	}
 	return shim.Success(jsonBytes)
-
-	
-	//return shim.Success([]byte("Reply from CreateProduct"))
 	
 }
 

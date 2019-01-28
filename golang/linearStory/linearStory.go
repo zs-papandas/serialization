@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 // LINKED LIST
 
@@ -9,24 +13,52 @@ type storyPage struct {
 	nextPage *storyPage
 }
 
-func (page *storyPage) playStory {
+func (page *storyPage) playStory() {
 	for page != nil {
 		fmt.Println(page.text)
 		page = page.nextPage
 	}
 }
 
+func (page *storyPage) addToEnd(text string) {
+	for page.nextPage != nil {
+		page = page.nextPage
+	}
+	page.nextPage = &storyPage{text, nil}
+}
+
 func main()  {
 
-	//scanner := bufio.NewScanner(os.Stdin)
+	scanner := bufio.NewScanner(os.Stdin)
 
 	page1 := storyPage{"Line 01 for linked list", nil} 
-	page2 := storyPage{"Line 02 for linked list", nil} 
-	page3 := storyPage{"Line 03 for linked list", nil} 
-	page1.nextPage = &page2
-	page2.nextPage = &page3
+	page1.addToEnd("Line 02 for linked list")
+	page1.addToEnd("Line 03 for linked list")
+	
+	
+	for{
+		fmt.Println("\n============================================")
+		fmt.Println("Choose your options:")
+		fmt.Println("(a) Add a new line")
+		fmt.Println("(b) Play all the lines")
+		fmt.Println("(c) Exit")
 
-	page1.playStory()
+		scanner.Scan()
+		response := scanner.Text()
 
-	fmt.Println("Over")
+		if response == "a" {
+			fmt.Println("Type your text and press ENTER:")
+			scanner.Scan()
+			text := scanner.Text()
+			page1.addToEnd(text)
+		} else if response == "b" {
+			page1.playStory()
+		} else if response == "c" {
+			fmt.Println("**** Application Over *****")
+			break
+		} else {
+			fmt.Println("**** Invalid response, try again. ****")
+		}
+	}
+
 }
