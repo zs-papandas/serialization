@@ -9,13 +9,11 @@ type storyPage struct {
 	nextPage *storyPage
 }
 
-func playStory(page *storyPage){
-	if page == nil{
-		return
+func (page *storyPage) playStory {
+	for page != nil {
+		fmt.Println(page.text)
+		page = page.nextPage
 	}
-
-	fmt.Println(page.text)
-	playStory(page.nextPage)
 }
 
 func main()  {
@@ -28,7 +26,7 @@ func main()  {
 	page1.nextPage = &page2
 	page2.nextPage = &page3
 
-	playStory(&page1)
+	page1.playStory()
 
 	fmt.Println("Over")
 }
