@@ -50,7 +50,7 @@ type GenerateProductContract struct {
 
 
 
-func (ac *GenerateProductContract) AddAccount(APIstub shim.ChaincodeStubInterface){
+func AddAccount(APIstub shim.ChaincodeStubInterface){
 
 
 	myInt, err := strconv.Atoi(myStr)
@@ -142,6 +142,11 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	amt = args[5]
 	myStr = args[6]
 	productType = args[7]
+
+	totalPallet, _ = strconv.Atoi(args[8])
+    totalBox, _ = strconv.Atoi(args[9])
+	totalPacket, _ = strconv.Atoi(args[10])
+	totalItem, _ = strconv.Atoi(args[11])
 
 	_, err := AddAccount(APIstub)
 	if err != nil {
