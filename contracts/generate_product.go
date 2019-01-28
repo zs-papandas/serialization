@@ -75,8 +75,8 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	return ret
-
+	//return ret
+	return shim.Success([]byte("Reply from Generate CreateProduct"))
 }
 
 func (ac *GenerateProductContract) AddAccount(APIstub shim.ChaincodeStubInterface){
@@ -144,6 +144,6 @@ func (ac *GenerateProductContract) AddAccount(APIstub shim.ChaincodeStubInterfac
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	return shim.Success(jsonBytes)
+	//return shim.Success(jsonBytes)
 	
 }
