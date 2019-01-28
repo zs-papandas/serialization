@@ -70,7 +70,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	myStr = args[6]
 	productType = args[7]
 
-	ret, err := AddAccount()
+	ret, err := AddAccount(APIstub)
 	if err != nil {
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
@@ -79,7 +79,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 }
 
-func AddAccount(){
+func AddAccount(APIstub shim.ChaincodeStubInterface){
 
 
 	myInt, err := strconv.Atoi(myStr)
