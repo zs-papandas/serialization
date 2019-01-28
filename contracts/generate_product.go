@@ -104,7 +104,7 @@ func (ac *GenerateProductContract) AddAccount(APIstub shim.ChaincodeStubInterfac
 	
 
 	var productInfo models.Product
-	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
+	productInfo = models.Product{no, today, *owner, pname, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
  	jsonBytes, err := json.Marshal(&productInfo)
 	if err != nil {
 		generateProductLogger.Error(err.Error())
@@ -143,7 +143,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	myStr = args[6]
 	productType = args[7]
 
-	ret, err := AddAccount(APIstub)
+	AddAccount(APIstub)
 	if err != nil {
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
