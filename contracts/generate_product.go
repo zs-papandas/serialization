@@ -134,14 +134,14 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
  	jsonBytes, err := json.Marshal(&productInfo)
 	if err != nil {
 		generateProductLogger.Error(err.Error())
-		//return shim.Error(err.Error())
+		return shim.Error(err.Error())
 	}
 
 	if err := APIstub.PutState(no, jsonBytes); err != nil {
 		generateProductLogger.Error(err.Error())
-		//return shim.Error(err.Error())
+		return shim.Error(err.Error())
 	}
-	//return shim.Success(jsonBytes)
+	return shim.Success(jsonBytes)
 	
 }
 
