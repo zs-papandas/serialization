@@ -79,7 +79,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 }
 
-func AddAccount(APIstub shim.ChaincodeStubInterface){
+func (ac *GenerateProductContract) AddAccount(APIstub shim.ChaincodeStubInterface){
 
 
 	myInt, err := strconv.Atoi(myStr)
@@ -129,7 +129,7 @@ func AddAccount(APIstub shim.ChaincodeStubInterface){
 		ProductTypeInt = types.UnKnownProduct
 	}
 
-	parentProduct := nil
+	parentProduct := "WIXnkuHMYZL5fGaE"
 	
 
 	var productInfo models.Product
