@@ -49,8 +49,34 @@ type GenerateProductContract struct {
 }
 
 
+//CreateProduct : save a product
+func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+	generateProductLogger.Infof("invoke Generate Product -> CreateProduct, args=%s\n", args)
+	generateProductLogger.Infof("invoke Generate Product length%s\n", len(args))
 
-func AddAccount(APIstub shim.ChaincodeStubInterface){
+	/*if len(args) != 9 {
+		errMsg := fmt.Sprintf("Incorrect number of arguments. %s\n", args)
+		generateProductLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}*/
+
+	
+	identity = args[0]
+	pname = args[1]
+	expired = args[2]
+	gtin = args[3]
+	lotnum = args[4]
+	status = "CREATED"
+	amt = args[5]
+	myStr = args[6]
+	productType = args[7]
+
+	totalPallet, _ = strconv.Atoi(args[8])
+    totalBox, _ = strconv.Atoi(args[9])
+	totalPacket, _ = strconv.Atoi(args[10])
+	totalItem, _ = strconv.Atoi(args[11])
+
+	
 
 
 	myInt, err := strconv.Atoi(myStr)
@@ -121,39 +147,4 @@ func AddAccount(APIstub shim.ChaincodeStubInterface){
 
 
 
-//CreateProduct : save a product
-func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-	generateProductLogger.Infof("invoke Generate Product -> CreateProduct, args=%s\n", args)
-	generateProductLogger.Infof("invoke Generate Product length%s\n", len(args))
-
-	/*if len(args) != 9 {
-		errMsg := fmt.Sprintf("Incorrect number of arguments. %s\n", args)
-		generateProductLogger.Error(errMsg)
-		return shim.Error(errMsg)
-	}*/
-
-	
-	identity = args[0]
-	pname = args[1]
-	expired = args[2]
-	gtin = args[3]
-	lotnum = args[4]
-	status = "CREATED"
-	amt = args[5]
-	myStr = args[6]
-	productType = args[7]
-
-	totalPallet, _ = strconv.Atoi(args[8])
-    totalBox, _ = strconv.Atoi(args[9])
-	totalPacket, _ = strconv.Atoi(args[10])
-	totalItem, _ = strconv.Atoi(args[11])
-
-	_, err := AddAccount(APIstub)
-	if err != nil {
-		generateProductLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-	//return ret
-	return shim.Success([]byte("Reply from Generate CreateProduct"))
-}
 
