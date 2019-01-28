@@ -48,6 +48,79 @@ var productType string
 type GenerateProductContract struct {
 }
 
+
+
+func (ac *GenerateProductContract) AddAccount(APIstub shim.ChaincodeStubInterface){
+
+
+	myInt, err := strconv.Atoi(myStr)
+	if err != nil {
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+		generateProductLogger.Error(errMsg)
+		//return shim.Error(errMsg)
+    }
+	totqty := myInt
+	avaiqty := myInt
+
+	no, err := utils.GetSerialNo(APIstub)
+	if err != nil {
+		generateProductLogger.Error(err.Error())
+		//return shim.Error(err.Error())
+	}
+	today := time.Now().Format(time.RFC3339)
+	
+	// GET USER ACCOUNT DETAIL
+	owner, err := utils.GetAccount(APIstub, identity)
+	if err != nil {
+		switch e := err.(type) {
+		case *utils.WarningResult:
+			generateProductLogger.Warning(err.Error())
+			//return shim.Success(e.JSONBytes())
+		default:
+			generateProductLogger.Error(err.Error())
+			//return shim.Error(err.Error())
+		}
+	}
+
+	generateProductLogger.Infof("User Account %s\n", owner.Firstname)
+	
+
+	// Get the Product Type
+	var ProductTypeInt types.ProductType
+	switch productType {
+	case "pallet":
+		ProductTypeInt = types.PalletProduct
+	case "box":
+		ProductTypeInt = types.BoxProduct
+	case "packet":
+		ProductTypeInt = types.PacketProduct
+	case "item":
+		ProductTypeInt = types.ItemProduct
+	default:
+		ProductTypeInt = types.UnKnownProduct
+	}
+
+	parentProduct := "WIXnkuHMYZL5fGaE"
+	
+
+	var productInfo models.Product
+	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
+ 	jsonBytes, err := json.Marshal(&productInfo)
+	if err != nil {
+		generateProductLogger.Error(err.Error())
+		//return shim.Error(err.Error())
+	}
+
+	if err := APIstub.PutState(no, jsonBytes); err != nil {
+		generateProductLogger.Error(err.Error())
+		//return shim.Error(err.Error())
+	}
+	//return shim.Success(jsonBytes)
+	
+}
+
+
+
 //CreateProduct : save a product
 func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	generateProductLogger.Infof("invoke Generate Product -> CreateProduct, args=%s\n", args)
@@ -79,71 +152,3 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	return shim.Success([]byte("Reply from Generate CreateProduct"))
 }
 
-func (ac *GenerateProductContract) AddAccount(APIstub shim.ChaincodeStubInterface){
-
-
-	myInt, err := strconv.Atoi(myStr)
-	if err != nil {
-        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
-		generateProductLogger.Error(errMsg)
-		return shim.Error(errMsg)
-    }
-	totqty := myInt
-	avaiqty := myInt
-
-	no, err := utils.GetSerialNo(APIstub)
-	if err != nil {
-		generateProductLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-	today := time.Now().Format(time.RFC3339)
-	
-	// GET USER ACCOUNT DETAIL
-	owner, err := utils.GetAccount(APIstub, identity)
-	if err != nil {
-		switch e := err.(type) {
-		case *utils.WarningResult:
-			generateProductLogger.Warning(err.Error())
-			return shim.Success(e.JSONBytes())
-		default:
-			generateProductLogger.Error(err.Error())
-			return shim.Error(err.Error())
-		}
-	}
-
-	generateProductLogger.Infof("User Account %s\n", owner.Firstname)
-	
-
-	// Get the Product Type
-	var ProductTypeInt types.ProductType
-	switch productType {
-	case "pallet":
-		ProductTypeInt = types.PalletProduct
-	case "box":
-		ProductTypeInt = types.BoxProduct
-	case "packet":
-		ProductTypeInt = types.PacketProduct
-	case "item":
-		ProductTypeInt = types.ItemProduct
-	default:
-		ProductTypeInt = types.UnKnownProduct
-	}
-
-	parentProduct := "WIXnkuHMYZL5fGaE"
-	
-
-	var productInfo models.Product
-	productInfo = models.Product{no, today, *owner, name, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
- 	jsonBytes, err := json.Marshal(&productInfo)
-	if err != nil {
-		generateProductLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-
-	if err := APIstub.PutState(no, jsonBytes); err != nil {
-		generateProductLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-	//return shim.Success(jsonBytes)
-	
-}
