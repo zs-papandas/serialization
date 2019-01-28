@@ -192,14 +192,14 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 }
 
 
-func mockChannelProvider(channelID string) context.ChannelProvider {
+/*func mockChannelProvider(channelID string) context.ChannelProvider {
 
 	channelProvider := func() (context.Channel, error) {
 		return mocks.NewMockChannel(channelID)
 	}
 
 	return channelProvider
-}
+}*/
 
 
 
