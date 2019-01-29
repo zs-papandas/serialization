@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 	"math/rand"
-	"time"
+	//"time"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
