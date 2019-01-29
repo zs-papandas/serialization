@@ -160,7 +160,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 		ForceSleep()
 
-		if(i < 10){
+		if i < 10 {
 			i++
 		}else{
 			break
