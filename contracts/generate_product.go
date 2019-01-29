@@ -64,7 +64,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	}*/
 
 	
-	/*identity = args[0]
+	identity = args[0]
 	pname = args[1]
 	expired = args[2]
 	gtin = args[3]
@@ -74,10 +74,10 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	myStr = args[6]
 	productType = "pallet"
 
-	totalPallet, _ = strconv.Atoi(args[7])
+	/*totalPallet, _ = strconv.Atoi(args[7])
     totalBox, _ = strconv.Atoi(args[8])
 	totalPacket, _ = strconv.Atoi(args[9])
-	totalItem, _ = strconv.Atoi(args[10])*/
+	totalItem, _ = strconv.Atoi(args[10])
 
 	identity = "a"
 	pname ="Product Name"
@@ -87,7 +87,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	status = "CREATED"
 	amt = "10000"
 	myStr = "10"
-	productType = "pallet"
+	productType = "pallet"*/
 
 	totalPallet = 2
     totalBox = 2
