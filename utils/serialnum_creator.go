@@ -35,7 +35,7 @@ func GetSerialNo(APIstub shim.ChaincodeStubInterface) (string, error) {
 	var no string
 	for {
 		no = getRandomString(16, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-		no = no + time.Now().Format(time.RFC3339)
+		//no = no + time.Now().Format(time.RFC3339)
 		existing, err := APIstub.GetState(no)
 		if err != nil {
 			logger.Error(fmt.Sprintf("APIstub.GetState Error. error = %s\n", err))
