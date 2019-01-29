@@ -214,21 +214,22 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 			//generateProductLogger.Infof("User Account %s\n", owner.Firstname)
 			
+			parentProduct := ""
 
 			// Get the Product Type
 			var ProductTypeInt types.ProductType
 			switch currCat {
 			case 0:
 				productType = "pallet"
-				parentProduct := ""
+				parentProduct = ""
 				ProductTypeInt = types.PalletProduct
 			case 1:
 				productType = "boc"
-				parentProduct := PalletArr[countPallet]
+				parentProduct = PalletArr[countPallet]
 				ProductTypeInt = types.BoxProduct
 			case 2:
 				productType = "packet"
-				parentProduct := BoxArr[countBox]
+				parentProduct = BoxArr[countBox]
 				ProductTypeInt = types.PacketProduct
 			case 3:
 				productType = "item"
@@ -236,7 +237,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				ProductTypeInt = types.ItemProduct
 			default:
 				productType = "unknown"
-				parentProduct := ""
+				parentProduct = ""
 				ProductTypeInt = types.UnKnownProduct
 			}
 
