@@ -306,7 +306,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		}else{
 			PalletArr=nil
 			countBox=0
-			ountPacket=0
+			countPacket=0
 			countItem=0
 			countPallet=0
 			currCat=0
