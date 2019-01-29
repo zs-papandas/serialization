@@ -41,7 +41,6 @@ var gtin string
 var lotnum string
 var status string
 var amt string
-var myStr string
 var productType string
 
 // GenerateProductContract : a struct to handle auto generate Product.
@@ -71,7 +70,6 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	lotnum = args[4]
 	status = "CREATED"
 	amt = args[5]
-	myStr = args[6]
 	
 
 	/*totalPallet, _ = strconv.Atoi(args[7])
@@ -89,22 +87,48 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	myStr = "10"
 	productType = "pallet"*/
 	
-	sp := args[7]
-	totalPallet, _ := strconv.Atoi(sp)
-    totalBox = 2
-	totalPacket = 2
-	totalItem = 2
-
-	currCat := 0
-	
-	myInt, err := strconv.Atoi(myStr)
+	str1 := args[6]
+	str2 := args[7]
+	str3 := args[8]
+	str4 := args[9]
+	totalPallet, err := strconv.Atoi(str1)
 	if err != nil {
         errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
 		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
-    }
-	totqty := myInt
-	avaiqty := myInt
+	}
+	
+    totalBox, err := strconv.Atoi(str2)
+	if err != nil {
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+		generateProductLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+
+	totalPacket, err := strconv.Atoi(str3)
+	if err != nil {
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+		generateProductLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+
+	totalItem, err := strconv.Atoi(str4)
+	if err != nil {
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+		generateProductLogger.Error(errMsg)
+		return shim.Error(errMsg)
+	}
+
+	currCat := 0
+	
+	/*myInt, err := strconv.Atoi(myStr)
+	if err != nil {
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+		generateProductLogger.Error(errMsg)
+		return shim.Error(errMsg)
+    }*/
+	totqty := totalBox
+	avaiqty := totalBox
 
 
 	//=================[ xGENESIS ]===================
@@ -257,23 +281,32 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				productType = "pallet"
 				parentProduct = ""
 				ProductTypeInt = types.PalletProduct
+				totqty = totalBox
+				avaiqty = totalBox
+
 			}else if currCat == 1 {
 				BoxArr = append(BoxArr, no)
 				productType = "box"
 				parentProduct = PalletArr[countPallet]
 				ProductTypeInt = types.BoxProduct
+				totqty = totalPacket
+				avaiqty = totalPacket
 				fmt.Printf("  ")
 			}else if currCat == 2 {
 				PacketArr = append(PacketArr, no)
 				productType = "packet"
 				parentProduct = BoxArr[countBox]
 				ProductTypeInt = types.PacketProduct
+				totqty = totalItem
+				avaiqty = totalItem
 				fmt.Printf("    ")
 			}else if currCat == 3 {
 				ItemArr = append(ItemArr, no)
 				productType = "item"
 				parentProduct = PacketArr[countPacket]
 				ProductTypeInt = types.ItemProduct
+				totqty = 0
+				avaiqty = 0
 				fmt.Printf("      ")
 			}else {
 				productType = "unknown"
