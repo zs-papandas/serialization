@@ -106,13 +106,12 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	avaiqty := myInt
 
 
-	//=================[GENESIS]===================
+	//=================[ xGENESIS ]===================
 
 	xno, err := utils.GetSerialNo(APIstub)
 	if err != nil {
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
-		break
 	}
 	xtoday := time.Now().Format(time.RFC3339)
 	xowner, err := utils.GetAccount(APIstub, identity)
@@ -121,11 +120,9 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		case *utils.WarningResult:
 			generateProductLogger.Warning(err.Error())
 			return shim.Success(e.JSONBytes())
-			break
 		default:
 			generateProductLogger.Error(err.Error())
 			return shim.Error(err.Error())
-			break
 		}
 	}
 	PalletArr = append(PalletArr, xno) 
@@ -135,13 +132,11 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	if err != nil {
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
-		break
 	}
 
 	if err := APIstub.PutState(no, xjsonBytes); err != nil {
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
-		break
 	}
 
 	//==============================================
