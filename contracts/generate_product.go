@@ -148,19 +148,19 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		//===========================================
 
 		if countPallet < totalPallet {
-			fmt.Println("Total Pallet", len(PalletArr))
+			//fmt.Println("Total Pallet", len(PalletArr))
 			if len(PalletArr) == 0 {
 				currCat++
 			}else{
-				fmt.Println(" - Total Box", len(BoxArr))
+				//fmt.Println(" - Total Box", len(BoxArr))
 				if len(BoxArr) == 0 {
 					currCat++	
 				}else{
-					fmt.Println("  - Total Packet", len(PacketArr))
+					//fmt.Println("  - Total Packet", len(PacketArr))
 					if len(PacketArr) == 0 {
 						currCat++
 					}else{
-						fmt.Println("    - Total Item", len(ItemArr))
+						//fmt.Println("    - Total Item", len(ItemArr))
 						if len(ItemArr) == 0{
 							currCat++
 						}else{
@@ -215,13 +215,13 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 			}
 			
 		}else{
-			fmt.Printf("Pallet LOADED\n")
+			//fmt.Printf("Pallet LOADED\n")
 		}
 	
 		
 	
 		if countPallet < totalPallet {
-			fmt.Println("HIT1-no")
+			
 			no, err := utils.GetSerialNo(APIstub)
 			if err != nil {
 				generateProductLogger.Error(err.Error())
@@ -229,7 +229,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				break
 			}
 			today := time.Now().Format(time.RFC3339)
-			fmt.Println("HIT2-today")
+			
 			// GET USER ACCOUNT DETAIL
 			owner, err := utils.GetAccount(APIstub, identity)
 			if err != nil {
@@ -244,14 +244,11 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 					break
 				}
 			}
-			fmt.Println("HIT3-owner")
+			
 			//generateProductLogger.Infof("User Account %s\n", owner.Firstname)
 			
 			parentProduct := ""
-			fmt.Println("HIT3.1-owner")
-			fmt.Println("HIT3.2-currCat", currCat)
-			fmt.Println("HIT3.1-owner")
-			fmt.Println("HIT3.1-owner")
+			
 			// Get the Product Type
 			var ProductTypeInt types.ProductType
 			if currCat == 0 {
@@ -264,23 +261,26 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				productType = "box"
 				parentProduct = PalletArr[countPallet]
 				ProductTypeInt = types.BoxProduct
+				fmt.Printf("  ")
 			}else if currCat == 2 {
 				PacketArr = append(PacketArr, no)
 				productType = "packet"
 				parentProduct = BoxArr[countBox]
 				ProductTypeInt = types.PacketProduct
+				fmt.Printf("    ")
 			}else if currCat == 3 {
 				ItemArr = append(ItemArr, no)
 				productType = "item"
 				parentProduct = PacketArr[countPacket]
 				ProductTypeInt = types.ItemProduct
+				fmt.Printf("      ")
 			}else {
 				productType = "unknown"
 				parentProduct = ""
 				ProductTypeInt = types.UnKnownProduct
 			}
 			
-			fmt.Println("HIT4-productType, Parrent", productType, parentProduct, ProductTypeInt)
+			fmt.Println("->", productType, " SERIALNO: ", no, "PARENT", parentProduct)
 			
 			//"WIXnkuHMYZL5fGaE"
 			
@@ -300,14 +300,11 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				break
 			}
 
-			generateProductLogger.Infof("->", productType, "No", no, "Parent", parentProduct)
+			
 			//return shim.Success(jsonBytes)
 			
 		}else{
-			fmt.Println(PalletArr)
-			fmt.Println(BoxArr)
-			fmt.Println(PacketArr)
-			fmt.Println(ItemArr)
+			PalletArr=nil
 			break
 		}
 
