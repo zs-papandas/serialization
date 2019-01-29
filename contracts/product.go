@@ -180,7 +180,10 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			}
 		}
 
-		/* If current product inventory is zero, update the parent about it */
+		/* 
+		If current product inventory is zero, update the parent about it
+		Packet LEVEL 
+		*/
 
 		if fromProduct.AvailQty > 0 {
 
@@ -282,8 +285,67 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				}
 			}  
 
-			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.BoxProduct {
+			/*
+			if stock available is 0
+			product type is Box
+			*/
+
+			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.PacketProduct {
+
+				fmt.Println("Box Product has Zero Inventory Available.")
+
+				fromfromProduct, err := utils.GetProduct(APIstub, fromProduct.ParentProduct)
+				if err != nil {
+					switch e := err.(type) {
+					case *utils.WarningResult:
+						productLogger.Warning(err.Error())
+						productLogger.Warning(e.JSONBytes())
+					default:
+						productLogger.Error(err.Error())
+					}
+				}
+
+				fromfromProduct.AvailQty = fromfromProduct.AvailQty - 1
+
+
+				fromfromProductBytes, err := json.Marshal(fromfromProduct)
+				if err != nil {
+					productLogger.Error(err.Error())
+				}
+				if err := APIstub.PutState(fromfromProduct.SerialId, fromfromProductBytes); err != nil {
+					productLogger.Error(err.Error())
+				}
+
 				
+
+				if(fromfromProduct.AvailQty == 0){
+					
+					fmt.Println("Update Pallet Product about Box Producted inventory running zero")
+
+					fromfromfromProduct, err := utils.GetProduct(APIstub, fromfromProduct.ParentProduct)
+					if err != nil {
+						switch e := err.(type) {
+						case *utils.WarningResult:
+							productLogger.Warning(err.Error())
+							productLogger.Warning(e.JSONBytes())
+						default:
+							productLogger.Error(err.Error())
+						}
+					}
+	
+					fromfromfromProduct.AvailQty = fromfromfromProduct.AvailQty - 1
+	
+	
+					fromfromfromProductBytes, err := json.Marshal(fromfromfromProduct)
+					if err != nil {
+						productLogger.Error(err.Error())
+					}
+					if err := APIstub.PutState(fromfromfromProduct.SerialId, fromfromfromProductBytes); err != nil {
+						productLogger.Error(err.Error())
+					}
+
+					
+				}
 			}
 
 			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.PalletProduct {
