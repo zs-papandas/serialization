@@ -174,7 +174,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			}
 		}
 
-		for fromProduct.AvailQty > 0 {
+		if fromProduct.AvailQty > 0 {
 
 			fromProduct.AvailQty = fromProduct.AvailQty - 1
 			fromProduct.Status = "ITEM_SOLD"
