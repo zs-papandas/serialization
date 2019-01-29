@@ -12,7 +12,7 @@ var logger = shim.NewLogger("utils/serialnum_creator")
 const (
 	letterIdxBits = 6
 	letterIdxMask = 1<<letterIdxBits - 1
-	letterIdxMax  = 63 / letterIdxBits
+	letterIdxMax  = 300063 / letterIdxBits
 )
 
 func getRandomString(n int, letterBytes string) string {
