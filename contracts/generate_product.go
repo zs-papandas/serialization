@@ -22,26 +22,7 @@ var totalBox int = 2
 var totalPacket int = 2
 var totalItem int = 2*/
 
-var countPallet int = 0
-var countBox int = 0
-var countPacket int = 0
-var countItem int = 0
 
-
-
-var PalletArr []string
-var BoxArr []string
-var PacketArr []string
-var ItemArr []string
-
-var identity string
-var pname string
-var expired string
-var gtin string
-var lotnum string
-var status string
-var amt string
-var productType string
 
 // GenerateProductContract : a struct to handle auto generate Product.
 type GenerateProductContract struct {
@@ -54,13 +35,34 @@ func ForceSleep(){
 //CreateProduct : save a product
 func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	generateProductLogger.Infof("invoke Generate Product -> CreateProduct, args=%s\n", args)
-	generateProductLogger.Infof("invoke Generate Product length%s\n", len(args))
+	//generateProductLogger.Infof("invoke Generate Product length%s\n", len(args))
 
-	/*if len(args) != 9 {
+	if len(args) != 10 {
 		errMsg := fmt.Sprintf("Incorrect number of arguments. %s\n", args)
 		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
-	}*/
+	}
+
+	var countPallet int = 0
+	var countBox int = 0
+	var countPacket int = 0
+	var countItem int = 0
+
+
+
+	var PalletArr []string
+	var BoxArr []string
+	var PacketArr []string
+	var ItemArr []string
+
+	var identity string
+	var pname string
+	var expired string
+	var gtin string
+	var lotnum string
+	var status string
+	var amt string
+	var productType string
 
 	
 	identity = args[0]
@@ -352,7 +354,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 			totalBox=0;
 			totalPacket=0;
 			totalItem=0;
-			
+
 			currCat=0
 			break
 		}
