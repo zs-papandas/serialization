@@ -157,7 +157,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 	}
 
-	if toProduct.ProductType != type.PalletProduct {
+	if toProduct.ProductType != types.PalletProduct {
 
 		fromProduct, err := utils.GetProduct(APIstub, toProduct.ParentProduct)
 		if err != nil {
