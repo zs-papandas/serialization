@@ -91,9 +91,9 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	totqty := myInt
 	avaiqty := myInt
 
-	i := 0
+	
 
-	for {
+	for i := 0; i < 10; i++ {
 
 		no, err := utils.GetSerialNo(APIstub)
 		if err != nil {
@@ -159,17 +159,9 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		//return shim.Success(jsonBytes)
 
 		ForceSleep()
-
-		if i < 10 {
-			i++
-		}else{
-			break
-		}
-
 		
 	}
 
-	
 	return shim.Success([]byte("Auto generating process over."))
 }
 
