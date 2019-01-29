@@ -88,11 +88,12 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	amt = "10000"
 	myStr = "10"
 	productType = "pallet"*/
-
-	totalPallet, _ := strconv.Atoi(string(args[7]))
-    totalBox, _ := strconv.Atoi(string(args[8]))
-	totalPacket, _ := strconv.Atoi(string(args[9]))
-	totalItem, _ := strconv.Atoi(string(args[10]))
+	
+	sp := args[7]
+	totalPallet, _ := strconv.Atoi(sp)
+    totalBox = 2
+	totalPacket = 2
+	totalItem = 2
 
 	currCat := 0
 	
