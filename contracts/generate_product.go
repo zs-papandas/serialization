@@ -93,7 +93,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 	i := 0
 
-	for i < 10 {
+	for {
 
 		no, err := utils.GetSerialNo(APIstub)
 		if err != nil {
@@ -160,7 +160,13 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 		ForceSleep()
 
-		i++
+		if(i < 10){
+			i++
+		}else{
+			break
+		}
+
+		
 	}
 
 	
