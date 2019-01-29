@@ -157,6 +157,11 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 	}
 
+	if toProduct.AvailQty == 0 && toProduct.ProductType != types.ItemProduct {
+		productLogger.Error("Out of stock")
+		return shim.Error("Out of stock")
+	}
+
 	if toProduct.ProductType != types.PalletProduct {
 
 		if toProduct.ProductType == types.ItemProduct && toProduct.Status != "CREATED" {
