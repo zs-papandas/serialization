@@ -134,7 +134,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		return shim.Error(err.Error())
 	}
 
-	if err := APIstub.PutState(no, xjsonBytes); err != nil {
+	if err := APIstub.PutState(xno, xjsonBytes); err != nil {
 		generateProductLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
