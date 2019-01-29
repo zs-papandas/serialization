@@ -194,39 +194,46 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	} 
 	
 	
+	if toProduct.AvailQty > 0 && toProduct.ProductType != types.ItemProduct {
 
+		toOwner, err := utils.GetAccount(APIstub, args[1])
+		if err != nil {
+			switch e := err.(type) {
+			case *utils.WarningResult:
+				productLogger.Warning(err.Error())
+				return shim.Success(e.JSONBytes())
+			default:
+				productLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+		}
 
-	toOwner, err := utils.GetAccount(APIstub, args[1])
-	if err != nil {
-		switch e := err.(type) {
-		case *utils.WarningResult:
-			productLogger.Warning(err.Error())
-			return shim.Success(e.JSONBytes())
-		default:
+		//productLogger.Infof("Product LotNumber")
+		//productLogger.Infof(*product.LotNumber)
+		//productLogger.Infof(toProduct.SerialId)
+		//productLogger.Infof(toOwner.Firstname)
+
+		toProduct.Owner = *toOwner
+		toProduct.Status = "OWNERSHIP_CHANGED"
+
+		toProductBytes, err := json.Marshal(toProduct)
+		if err != nil {
 			productLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
+		if err := APIstub.PutState(toProduct.SerialId, toProductBytes); err != nil {
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+
+		return shim.Success(toProductBytes)
+		
+	}else{
+		productLogger.Error("Inventory not available. Sold Out.")
+		return shim.Error("Inventory not available. Sold Out.")
 	}
 
-	//productLogger.Infof("Product LotNumber")
-	//productLogger.Infof(*product.LotNumber)
-	//productLogger.Infof(toProduct.SerialId)
-	//productLogger.Infof(toOwner.Firstname)
-
-	toProduct.Owner = *toOwner
-	toProduct.Status = "OWNERSHIP_CHANGED"
-
-	toProductBytes, err := json.Marshal(toProduct)
-	if err != nil {
-		productLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-	if err := APIstub.PutState(toProduct.SerialId, toProductBytes); err != nil {
-		productLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-
-	return shim.Success(toProductBytes)
+	
 	
 }
 
