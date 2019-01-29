@@ -96,8 +96,6 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 	currCat := 0
 	
-
-
 	myInt, err := strconv.Atoi(myStr)
 	if err != nil {
         errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
@@ -106,6 +104,47 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
     }
 	totqty := myInt
 	avaiqty := myInt
+
+
+	//=================[GENESIS]===================
+
+	xno, err := utils.GetSerialNo(APIstub)
+	if err != nil {
+		generateProductLogger.Error(err.Error())
+		return shim.Error(err.Error())
+		break
+	}
+	xtoday := time.Now().Format(time.RFC3339)
+	xowner, err := utils.GetAccount(APIstub, identity)
+	if err != nil {
+		switch e := err.(type) {
+		case *utils.WarningResult:
+			generateProductLogger.Warning(err.Error())
+			return shim.Success(e.JSONBytes())
+			break
+		default:
+			generateProductLogger.Error(err.Error())
+			return shim.Error(err.Error())
+			break
+		}
+	}
+	PalletArr = append(PalletArr, xno) 
+	var xproductInfo models.Product
+	xproductInfo = models.Product{xno, xtoday, *xowner, pname, expired, gtin, lotnum, status, amt, totqty, avaiqty, types.PalletProduct, ""}
+	xjsonBytes, err := json.Marshal(&xproductInfo)
+	if err != nil {
+		generateProductLogger.Error(err.Error())
+		return shim.Error(err.Error())
+		break
+	}
+
+	if err := APIstub.PutState(no, xjsonBytes); err != nil {
+		generateProductLogger.Error(err.Error())
+		return shim.Error(err.Error())
+		break
+	}
+
+	//==============================================
 
 	
 
