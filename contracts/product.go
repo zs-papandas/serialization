@@ -158,8 +158,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	}
 
 	if toProduct.AvailQty == 0 && toProduct.ProductType != types.ItemProduct {
-		productLogger.Error("Out of stock")
-		return shim.Error("Out of stock")
+		productLogger.Error("Inventory/stock over")
+		return shim.Error("Inventory/stock over")
 	}
 
 	if toProduct.ProductType != types.PalletProduct {
@@ -180,6 +180,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			}
 		}
 
+		/* If current product inventory is zero, update the parent about it */
+
 		if fromProduct.AvailQty > 0 {
 
 			fromProduct.AvailQty = fromProduct.AvailQty - 1
@@ -192,6 +194,102 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			if err := APIstub.PutState(fromProduct.SerialId, fromProductBytes); err != nil {
 				productLogger.Error(err.Error())
 			}
+
+			/*
+			if stock available is 0
+			product type is Packet
+			*/
+
+			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.PacketProduct {
+
+				fmt.Println("Packet Product has Zero Inventory Available.")
+
+				fromfromProduct, err := utils.GetProduct(APIstub, fromProduct.ParentProduct)
+				if err != nil {
+					switch e := err.(type) {
+					case *utils.WarningResult:
+						productLogger.Warning(err.Error())
+						productLogger.Warning(e.JSONBytes())
+					default:
+						productLogger.Error(err.Error())
+					}
+				}
+
+				fromfromProduct.AvailQty = fromfromProduct.AvailQty - 1
+
+
+				fromfromProductBytes, err := json.Marshal(fromfromProduct)
+				if err != nil {
+					productLogger.Error(err.Error())
+				}
+				if err := APIstub.PutState(fromfromProduct.SerialId, fromfromProductBytes); err != nil {
+					productLogger.Error(err.Error())
+				}
+
+				
+
+				if(fromfromProduct.AvailQty == 0){
+					fmt.Println("Update Box Product about Packet Producted inventory running zero")
+
+					fromfromfromProduct, err := utils.GetProduct(APIstub, fromfromProduct.ParentProduct)
+					if err != nil {
+						switch e := err.(type) {
+						case *utils.WarningResult:
+							productLogger.Warning(err.Error())
+							productLogger.Warning(e.JSONBytes())
+						default:
+							productLogger.Error(err.Error())
+						}
+					}
+	
+					fromfromfromProduct.AvailQty = fromfromfromProduct.AvailQty - 1
+	
+	
+					fromfromfromProductBytes, err := json.Marshal(fromfromfromProduct)
+					if err != nil {
+						productLogger.Error(err.Error())
+					}
+					if err := APIstub.PutState(fromfromfromProduct.SerialId, fromfromfromProductBytes); err != nil {
+						productLogger.Error(err.Error())
+					}
+
+					if(fromfromfromProduct.AvailQty == 0){
+						fmt.Println("Update Pallet Proudct when Box Product Inventory found zero")
+
+						fromfromfromfromProduct, err := utils.GetProduct(APIstub, fromfromfromProduct.ParentProduct)
+						if err != nil {
+							switch e := err.(type) {
+							case *utils.WarningResult:
+								productLogger.Warning(err.Error())
+								productLogger.Warning(e.JSONBytes())
+							default:
+								productLogger.Error(err.Error())
+							}
+						}
+		
+						fromfromfromfromProduct.AvailQty = fromfromfromfromProduct.AvailQty - 1
+		
+		
+						fromfromfromfromProductBytes, err := json.Marshal(fromfromfromfromProduct)
+						if err != nil {
+							productLogger.Error(err.Error())
+						}
+						if err := APIstub.PutState(fromfromfromfromProduct.SerialId, fromfromfromfromProductBytes); err != nil {
+							productLogger.Error(err.Error())
+						}
+
+					}
+				}
+			}  
+
+			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.BoxProduct {
+				
+			}
+
+			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.PalletProduct {
+				
+			}
+
 		}else{
 			productLogger.Error("Inventory is Empty. Sold Out.")
 			return shim.Error("Inventory is Empty. Sold Out.")
