@@ -159,6 +159,11 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 
 	if toProduct.ProductType != types.PalletProduct {
 
+		if toProduct.ProductType == types.ItemProduct && toProduct.Status != "CREATED" {
+			productLogger.Error("Item not available. Sold Out.")
+			return shim.Error("Item not available. Sold Out.")
+		}
+
 		fromProduct, err := utils.GetProduct(APIstub, toProduct.ParentProduct)
 		if err != nil {
 			switch e := err.(type) {
@@ -169,29 +174,26 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			}
 		}
 
-		str := fromProduct.AvailQty
-		AvailQty, err := utils.GetAmount(str)
-		if err != nil {
-			switch e := err.(type) {
-			case *utils.WarningResult:
-				productLogger.Warning(err.Error())
-			default:
+		for fromProduct.AvailQty > 0 {
+
+			fromProduct.AvailQty = fromProduct.AvailQty - 1
+			fromProduct.Status = "ITEM_SOLD"
+	
+			fromProductBytes, err := json.Marshal(fromProduct)
+			if err != nil {
 				productLogger.Error(err.Error())
 			}
+			if err := APIstub.PutState(fromProduct.SerialId, fromProductBytes); err != nil {
+				productLogger.Error(err.Error())
+			}
+		}else{
+			productLogger.Error("Inventory not available. Sold Out.")
+			return shim.Error("Inventory not available. Sold Out.")
 		}
+	} 
+	
+	
 
-		fromProduct.AvailQty = AvailQty - 1
-		fromProduct.Status = "ITEM_SOLD"
-
-		fromProductBytes, err := json.Marshal(fromProduct)
-		if err != nil {
-			productLogger.Error(err.Error())
-		}
-		if err := APIstub.PutState(fromProduct.SerialId, fromProductBytes); err != nil {
-			productLogger.Error(err.Error())
-		}
-
-	}
 
 	toOwner, err := utils.GetAccount(APIstub, args[1])
 	if err != nil {
