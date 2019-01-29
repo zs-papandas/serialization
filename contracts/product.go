@@ -169,6 +169,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			switch e := err.(type) {
 			case *utils.WarningResult:
 				productLogger.Warning(err.Error())
+				productLogger.Warning(e.JSONBytes())
 			default:
 				productLogger.Error(err.Error())
 			}
