@@ -89,10 +89,10 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	myStr = "10"
 	productType = "pallet"*/
 
-	totalPallet := 2
-    totalBox := 2
-	totalPacket := 2
-	totalItem := 2
+	totalPallet, _ := strconv.Atoi(args[7])
+    totalBox, _ := strconv.Atoi(args[8])
+	totalPacket, _ := strconv.Atoi(args[9])
+	totalItem, _ := strconv.Atoi(args[10])
 
 	currCat := 0
 	
@@ -300,11 +300,16 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				break
 			}
 
-			
+			ForceSleep()
 			//return shim.Success(jsonBytes)
 			
 		}else{
 			PalletArr=nil
+			countBox=0
+			ountPacket=0
+			countItem=0
+			countPallet=0
+			currCat=0
 			break
 		}
 
@@ -312,10 +317,10 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 		
 
-		ForceSleep()
+		
 		
 	}
-
+	fmt.Println("AUTO-PRODUCT GENERATED")
 	return shim.Success([]byte("Auto generating process over."))
 }
 
