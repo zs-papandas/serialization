@@ -116,6 +116,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		if countPallet < totalPallet {
 			fmt.Println("Total Pallet", len(PalletArr))
 			if len(PalletArr) == 0 {
+				fmt.Println(" -")
 				currCat++
 				fmt.Println(" -")
 			}else{
