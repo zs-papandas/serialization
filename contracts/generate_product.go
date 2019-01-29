@@ -249,7 +249,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	
 		if countPallet < totalPallet {
 			
-			no, err := "SR"+time.Now().Format(time.RFC3339) 
+			no := "SR"+time.Now().Format(time.RFC3339) 
 			//utils.GetSerialNo(APIstub)
 			if err != nil {
 				generateProductLogger.Error(err.Error())
