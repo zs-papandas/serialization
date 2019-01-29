@@ -215,30 +215,37 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 			
 			parentProduct := ""
 			fmt.Println("HIT3.1-owner")
+			fmt.Println("HIT3.2-currCat", currCat)
+			fmt.Println("HIT3.1-owner")
+			fmt.Println("HIT3.1-owner")
 			// Get the Product Type
 			var ProductTypeInt types.ProductType
-			switch currCat {
-			case 0:
+			if currCat == 0 {
+				PalletArr = append(PalletArr, no) 
 				productType = "pallet"
 				parentProduct = ""
 				ProductTypeInt = types.PalletProduct
-			case 1:
+			}else if currCat == 1 {
+				BoxArr = append(BoxArr, no)
 				productType = "box"
 				parentProduct = PalletArr[countPallet]
 				ProductTypeInt = types.BoxProduct
-			case 2:
+			}else if currCat == 2 {
+				PacketArr = append(PacketArr, no)
 				productType = "packet"
 				parentProduct = BoxArr[countBox]
 				ProductTypeInt = types.PacketProduct
-			case 3:
+			}else if currCat == 3 {
+				ItemArr = append(ItemArr, no)
 				productType = "item"
 				parentProduct = PacketArr[countPacket]
 				ProductTypeInt = types.ItemProduct
-			default:
+			}else {
 				productType = "unknown"
 				parentProduct = ""
 				ProductTypeInt = types.UnKnownProduct
 			}
+			
 			fmt.Println("HIT4-productType, Parrent", productType, parentProduct, ProductTypeInt)
 			
 			//"WIXnkuHMYZL5fGaE"
