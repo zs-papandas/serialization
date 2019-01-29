@@ -83,66 +83,83 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	if err != nil {
         errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
 		generateProductLogger.Error(errMsg)
-		//return shim.Error(errMsg)
+		return shim.Error(errMsg)
     }
 	totqty := myInt
 	avaiqty := myInt
 
-	no, err := utils.GetSerialNo(APIstub)
-	if err != nil {
-		generateProductLogger.Error(err.Error())
-		//return shim.Error(err.Error())
-	}
-	today := time.Now().Format(time.RFC3339)
-	
-	// GET USER ACCOUNT DETAIL
-	owner, err := utils.GetAccount(APIstub, identity)
-	if err != nil {
-		switch e := err.(type) {
-		case *utils.WarningResult:
-			generateProductLogger.Warning(err.Error())
-			//return shim.Success(e.JSONBytes())
-		default:
+	i := 0
+
+	for i < 10 {
+
+		no, err := utils.GetSerialNo(APIstub)
+		if err != nil {
 			generateProductLogger.Error(err.Error())
-			//return shim.Error(err.Error())
+			return shim.Error(err.Error())
+			break
 		}
+		today := time.Now().Format(time.RFC3339)
+		
+		// GET USER ACCOUNT DETAIL
+		owner, err := utils.GetAccount(APIstub, identity)
+		if err != nil {
+			switch e := err.(type) {
+			case *utils.WarningResult:
+				generateProductLogger.Warning(err.Error())
+				return shim.Success(e.JSONBytes())
+				break
+			default:
+				generateProductLogger.Error(err.Error())
+				return shim.Error(err.Error())
+				break
+			}
+		}
+
+		//generateProductLogger.Infof("User Account %s\n", owner.Firstname)
+		
+
+		// Get the Product Type
+		var ProductTypeInt types.ProductType
+		switch productType {
+		case "pallet":
+			ProductTypeInt = types.PalletProduct
+		case "box":
+			ProductTypeInt = types.BoxProduct
+		case "packet":
+			ProductTypeInt = types.PacketProduct
+		case "item":
+			ProductTypeInt = types.ItemProduct
+		default:
+			ProductTypeInt = types.UnKnownProduct
+		}
+
+		parentProduct := nil
+		//"WIXnkuHMYZL5fGaE"
+		
+
+		var productInfo models.Product
+		productInfo = models.Product{no, today, *owner, pname, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
+		jsonBytes, err := json.Marshal(&productInfo)
+		if err != nil {
+			generateProductLogger.Error(err.Error())
+			return shim.Error(err.Error())
+			break
+		}
+
+		if err := APIstub.PutState(no, jsonBytes); err != nil {
+			generateProductLogger.Error(err.Error())
+			return shim.Error(err.Error())
+			break
+		}
+
+		generateProductLogger.Infof("productType %s\n", productType, " - ", no)
+		//return shim.Success(jsonBytes)
+
+		i++
 	}
 
-	generateProductLogger.Infof("User Account %s\n", owner.Firstname)
 	
-
-	// Get the Product Type
-	var ProductTypeInt types.ProductType
-	switch productType {
-	case "pallet":
-		ProductTypeInt = types.PalletProduct
-	case "box":
-		ProductTypeInt = types.BoxProduct
-	case "packet":
-		ProductTypeInt = types.PacketProduct
-	case "item":
-		ProductTypeInt = types.ItemProduct
-	default:
-		ProductTypeInt = types.UnKnownProduct
-	}
-
-	parentProduct := "WIXnkuHMYZL5fGaE"
-	
-
-	var productInfo models.Product
-	productInfo = models.Product{no, today, *owner, pname, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
- 	jsonBytes, err := json.Marshal(&productInfo)
-	if err != nil {
-		generateProductLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-
-	if err := APIstub.PutState(no, jsonBytes); err != nil {
-		generateProductLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-	return shim.Success(jsonBytes)
-	
+	return shim.Success([]byte("Auto generating process over."))
 }
 
 
