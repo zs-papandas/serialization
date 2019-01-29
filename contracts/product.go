@@ -157,15 +157,6 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 	}
 
-	if toProduct.AvailQty > 0 && toProduct.ProductType != types.ItemProduct {
-
-
-
-	}else{
-		productLogger.Error("Inventory not available. Sold Out.")
-		return shim.Error("Inventory not available. Sold Out.")
-	}
-
 	if toProduct.ProductType != types.PalletProduct {
 
 		if toProduct.ProductType == types.ItemProduct && toProduct.Status != "CREATED" {
@@ -197,8 +188,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				productLogger.Error(err.Error())
 			}
 		}else{
-			productLogger.Error("Inventory not available. Sold Out.")
-			return shim.Error("Inventory not available. Sold Out.")
+			productLogger.Error("Inventory is Empty. Sold Out.")
+			return shim.Error("Inventory is Empty. Sold Out.")
 		}
 	} 
 	
