@@ -27,7 +27,7 @@ var countBox int = 0
 var countPacket int = 0
 var countItem int = 0
 
-var currCat int = 0;
+
 
 var PalletArr []string
 var BoxArr []string
@@ -94,6 +94,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	totalPacket := 2
 	totalItem := 2
 
+	currCat := 0
 	
 
 
@@ -116,16 +117,17 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 			fmt.Println("Total Pallet", len(PalletArr))
 			if len(PalletArr) == 0 {
 				currCat++
+				fmt.Println(" -")
 			}else{
-				fmt.Println("Total Box", len(BoxArr))
+				fmt.Println(" - Total Box", len(BoxArr))
 				if len(BoxArr) == 0 {
 					currCat++	
 				}else{
-					fmt.Println("Total Packet", len(PacketArr))
+					fmt.Println("  - Total Packet", len(PacketArr))
 					if len(PacketArr) == 0 {
 						currCat++
 					}else{
-						fmt.Println("Total Item", len(ItemArr))
+						fmt.Println("    - Total Item", len(ItemArr))
 						if len(ItemArr) == 0{
 							currCat++
 						}else{
