@@ -339,10 +339,20 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 			
 		}else{
 			PalletArr=nil
+			BoxArr=nil
+			PacketArr=nil
+			ItemArr=nil
+
 			countBox=0
 			countPacket=0
 			countItem=0
 			countPallet=0
+
+			totalPallet=0;
+			totalBox=0;
+			totalPacket=0;
+			totalItem=0;
+			
 			currCat=0
 			break
 		}
