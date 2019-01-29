@@ -116,9 +116,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 		if countPallet < totalPallet {
 			fmt.Println("Total Pallet", len(PalletArr))
 			if len(PalletArr) == 0 {
-				fmt.Println(" -")
 				currCat++
-				fmt.Println(" -")
 			}else{
 				fmt.Println(" - Total Box", len(BoxArr))
 				if len(BoxArr) == 0 {
@@ -184,14 +182,12 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 			
 		}else{
 			fmt.Printf("Pallet LOADED\n")
-			
-	
 		}
 	
 		
 	
 		if countPallet < totalPallet {
-			
+			fmt.Println("HIT1-no")
 			no, err := utils.GetSerialNo(APIstub)
 			if err != nil {
 				generateProductLogger.Error(err.Error())
@@ -199,7 +195,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				break
 			}
 			today := time.Now().Format(time.RFC3339)
-			
+			fmt.Println("HIT2-today")
 			// GET USER ACCOUNT DETAIL
 			owner, err := utils.GetAccount(APIstub, identity)
 			if err != nil {
@@ -214,11 +210,11 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 					break
 				}
 			}
-
+			fmt.Println("HIT3-owner")
 			//generateProductLogger.Infof("User Account %s\n", owner.Firstname)
 			
 			parentProduct := ""
-
+			fmt.Println("HIT3.1-owner")
 			// Get the Product Type
 			var ProductTypeInt types.ProductType
 			switch currCat {
@@ -243,7 +239,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				parentProduct = ""
 				ProductTypeInt = types.UnKnownProduct
 			}
-
+			fmt.Println("HIT4-productType, Parrent", productType, parentProduct, ProductTypeInt)
 			
 			//"WIXnkuHMYZL5fGaE"
 			
