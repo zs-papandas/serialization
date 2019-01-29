@@ -73,21 +73,6 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	status = "CREATED"
 	amt = args[5]
 	
-
-	/*totalPallet, _ = strconv.Atoi(args[7])
-    totalBox, _ = strconv.Atoi(args[8])
-	totalPacket, _ = strconv.Atoi(args[9])
-	totalItem, _ = strconv.Atoi(args[10])
-
-	identity = "a"
-	pname ="Product Name"
-	expired = "Expired"
-	gtin = "GTIN-23432"
-	lotnum = "LOTNUM"
-	status = "CREATED"
-	amt = "10000"
-	myStr = "10"
-	productType = "pallet"*/
 	
 	str1 := args[6]
 	str2 := args[7]

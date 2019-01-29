@@ -157,6 +157,42 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 	}
 
+	if toProduct.ProductType != type.PalletProduct {
+
+		fromProduct, err := utils.GetProduct(APIstub, toProduct.ParentProduct)
+		if err != nil {
+			switch e := err.(type) {
+			case *utils.WarningResult:
+				productLogger.Warning(err.Error())
+			default:
+				productLogger.Error(err.Error())
+			}
+		}
+
+		str := fromProduct.AvailQty
+		AvailQty, err := utils.GetAmount(str)
+		if err != nil {
+			switch e := err.(type) {
+			case *utils.WarningResult:
+				productLogger.Warning(err.Error())
+			default:
+				productLogger.Error(err.Error())
+			}
+		}
+
+		fromProduct.AvailQty = AvailQty - 1
+		fromProduct.Status = "ITEM_SOLD"
+
+		fromProductBytes, err := json.Marshal(fromProduct)
+		if err != nil {
+			productLogger.Error(err.Error())
+		}
+		if err := APIstub.PutState(fromProduct.SerialId, fromProductBytes); err != nil {
+			productLogger.Error(err.Error())
+		}
+
+	}
+
 	toOwner, err := utils.GetAccount(APIstub, args[1])
 	if err != nil {
 		switch e := err.(type) {
@@ -169,10 +205,10 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 	}
 
-	productLogger.Infof("Product LotNumber")
+	//productLogger.Infof("Product LotNumber")
 	//productLogger.Infof(*product.LotNumber)
-	productLogger.Infof(toProduct.SerialId)
-	productLogger.Infof(toOwner.Firstname)
+	//productLogger.Infof(toProduct.SerialId)
+	//productLogger.Infof(toOwner.Firstname)
 
 	toProduct.Owner = *toOwner
 	toProduct.Status = "OWNERSHIP_CHANGED"
