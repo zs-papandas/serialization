@@ -93,28 +93,28 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	str4 := args[9]
 	totalPallet, err := strconv.Atoi(str1)
 	if err != nil {
-        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", str1)
 		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
 	
     totalBox, err := strconv.Atoi(str2)
 	if err != nil {
-        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", str2)
 		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
 
 	totalPacket, err := strconv.Atoi(str3)
 	if err != nil {
-        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", str3)
 		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
 
 	totalItem, err := strconv.Atoi(str4)
 	if err != nil {
-        errMsg := fmt.Sprintf("Failed: string to int. %s\n", myStr)
+        errMsg := fmt.Sprintf("Failed: string to int. %s\n", str4)
 		generateProductLogger.Error(errMsg)
 		return shim.Error(errMsg)
 	}
