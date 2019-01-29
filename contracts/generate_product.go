@@ -224,7 +224,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				parentProduct = ""
 				ProductTypeInt = types.PalletProduct
 			case 1:
-				productType = "boc"
+				productType = "box"
 				parentProduct = PalletArr[countPallet]
 				ProductTypeInt = types.BoxProduct
 			case 2:
@@ -260,7 +260,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				break
 			}
 
-			generateProductLogger.Infof("->", productType, " - ", no)
+			generateProductLogger.Infof("->", productType, "No", no, "Parent", parentProduct)
 			//return shim.Success(jsonBytes)
 			
 		}else{
