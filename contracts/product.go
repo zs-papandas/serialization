@@ -290,7 +290,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			product type is Box
 			*/
 
-			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.PacketProduct {
+			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.BoxProduct {
 
 				fmt.Println("Box Product has Zero Inventory Available.")
 
@@ -319,7 +319,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				
 
 				if(fromfromProduct.AvailQty == 0){
-					
+
 					fmt.Println("Update Pallet Product about Box Producted inventory running zero")
 
 					fromfromfromProduct, err := utils.GetProduct(APIstub, fromfromProduct.ParentProduct)
@@ -348,9 +348,6 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				}
 			}
 
-			if fromProduct.AvailQty == 0 && fromProduct.ProductType == types.PalletProduct {
-				
-			}
 
 		}else{
 			productLogger.Error("Inventory is Empty. Sold Out.")
