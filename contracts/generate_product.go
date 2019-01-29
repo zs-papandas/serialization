@@ -233,7 +233,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 				ProductTypeInt = types.PacketProduct
 			case 3:
 				productType = "item"
-				parentProduct := PacketArr[countPacket]
+				parentProduct = PacketArr[countPacket]
 				ProductTypeInt = types.ItemProduct
 			default:
 				productType = "unknown"
