@@ -29,7 +29,7 @@ type GenerateProductContract struct {
 }
 
 func ForceSleep(){
-	time.Sleep(99 * time.Millisecond)
+	time.Sleep(5 * time.Millisecond)
 }
 
 //CreateProduct : save a product
