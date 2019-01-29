@@ -17,10 +17,10 @@ import (
 
 var generateProductLogger = shim.NewLogger("contracts/generate_product")
 
-var totalPallet int = 2
+/*var totalPallet int = 2
 var totalBox int = 2
 var totalPacket int = 2
-var totalItem int = 2
+var totalItem int = 2*/
 
 var countPallet int = 0
 var countBox int = 0
@@ -72,7 +72,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	status = "CREATED"
 	amt = args[5]
 	myStr = args[6]
-	productType = "pallet"
+	
 
 	/*totalPallet, _ = strconv.Atoi(args[7])
     totalBox, _ = strconv.Atoi(args[8])
@@ -89,10 +89,10 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 	myStr = "10"
 	productType = "pallet"*/
 
-	totalPallet = 2
-    totalBox = 2
-	totalPacket = 2
-	totalItem = 2
+	totalPallet := 2
+    totalBox := 2
+	totalPacket := 2
+	totalItem := 2
 
 	
 
@@ -108,70 +108,171 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 	
 
-	for i := 0; i < 10; i++ {
+	for {
 
-		no, err := utils.GetSerialNo(APIstub)
-		if err != nil {
-			generateProductLogger.Error(err.Error())
-			return shim.Error(err.Error())
-			break
+		//===========================================
+
+		if countPallet < totalPallet {
+			fmt.Println("Total Pallet", len(PalletArr))
+			if len(PalletArr) == 0 {
+				currCat++
+			}else{
+				fmt.Println("Total Box", len(BoxArr))
+				if len(BoxArr) == 0 {
+					currCat++	
+				}else{
+					fmt.Println("Total Packet", len(PacketArr))
+					if len(PacketArr) == 0 {
+						currCat++
+					}else{
+						fmt.Println("Total Item", len(ItemArr))
+						if len(ItemArr) == 0{
+							currCat++
+						}else{
+							if len(ItemArr) == totalItem {
+								//fmt.Println("Items LOADED")
+								if len(PacketArr) == totalPacket {
+									//fmt.Println("Packets LOADED")
+									if len(BoxArr) == totalBox {
+										//fmt.Println("Box LOADED")
+	
+										// RESET
+										countBox=0
+										countPacket=0
+										countItem=0
+	
+										countPallet++
+	
+										currCat=0
+	
+										//PalletArr=nil
+										BoxArr=nil
+										PacketArr=nil
+										ItemArr=nil
+									}else{
+										countItem=0
+										countPacket=0
+	
+	
+										countBox++
+	
+										currCat=1
+										
+										PacketArr=nil
+										ItemArr=nil
+									}
+								}else{
+									countItem=0
+									countPacket++
+									currCat=2
+									ItemArr=nil
+	
+								}
+	
+							}else{
+								
+								countItem++
+							}
+						}
+					}
+				}
+			
+			}
+			
+		}else{
+			fmt.Printf("Pallet LOADED\n")
+			
+	
 		}
-		today := time.Now().Format(time.RFC3339)
+	
 		
-		// GET USER ACCOUNT DETAIL
-		owner, err := utils.GetAccount(APIstub, identity)
-		if err != nil {
-			switch e := err.(type) {
-			case *utils.WarningResult:
-				generateProductLogger.Warning(err.Error())
-				return shim.Success(e.JSONBytes())
-				break
-			default:
+	
+		if countPallet < totalPallet {
+			
+			no, err := utils.GetSerialNo(APIstub)
+			if err != nil {
 				generateProductLogger.Error(err.Error())
 				return shim.Error(err.Error())
 				break
 			}
-		}
+			today := time.Now().Format(time.RFC3339)
+			
+			// GET USER ACCOUNT DETAIL
+			owner, err := utils.GetAccount(APIstub, identity)
+			if err != nil {
+				switch e := err.(type) {
+				case *utils.WarningResult:
+					generateProductLogger.Warning(err.Error())
+					return shim.Success(e.JSONBytes())
+					break
+				default:
+					generateProductLogger.Error(err.Error())
+					return shim.Error(err.Error())
+					break
+				}
+			}
 
-		//generateProductLogger.Infof("User Account %s\n", owner.Firstname)
-		
+			//generateProductLogger.Infof("User Account %s\n", owner.Firstname)
+			
 
-		// Get the Product Type
-		var ProductTypeInt types.ProductType
-		switch productType {
-		case "pallet":
-			ProductTypeInt = types.PalletProduct
-		case "box":
-			ProductTypeInt = types.BoxProduct
-		case "packet":
-			ProductTypeInt = types.PacketProduct
-		case "item":
-			ProductTypeInt = types.ItemProduct
-		default:
-			ProductTypeInt = types.UnKnownProduct
-		}
+			// Get the Product Type
+			var ProductTypeInt types.ProductType
+			switch currCat {
+			case 0:
+				productType = "pallet"
+				parentProduct := ""
+				ProductTypeInt = types.PalletProduct
+			case 1:
+				productType = "boc"
+				parentProduct := PalletArr[countPallet]
+				ProductTypeInt = types.BoxProduct
+			case 2:
+				productType = "packet"
+				parentProduct := BoxArr[countBox]
+				ProductTypeInt = types.PacketProduct
+			case 3:
+				productType = "item"
+				parentProduct := PacketArr[countPacket]
+				ProductTypeInt = types.ItemProduct
+			default:
+				productType = "unknown"
+				parentProduct := ""
+				ProductTypeInt = types.UnKnownProduct
+			}
 
-		parentProduct := ""
-		//"WIXnkuHMYZL5fGaE"
-		
+			
+			//"WIXnkuHMYZL5fGaE"
+			
 
-		var productInfo models.Product
-		productInfo = models.Product{no, today, *owner, pname, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
-		jsonBytes, err := json.Marshal(&productInfo)
-		if err != nil {
-			generateProductLogger.Error(err.Error())
-			return shim.Error(err.Error())
+			var productInfo models.Product
+			productInfo = models.Product{no, today, *owner, pname, expired, gtin, lotnum, status, amt, totqty, avaiqty, ProductTypeInt, parentProduct}
+			jsonBytes, err := json.Marshal(&productInfo)
+			if err != nil {
+				generateProductLogger.Error(err.Error())
+				return shim.Error(err.Error())
+				break
+			}
+
+			if err := APIstub.PutState(no, jsonBytes); err != nil {
+				generateProductLogger.Error(err.Error())
+				return shim.Error(err.Error())
+				break
+			}
+
+			generateProductLogger.Infof("->", productType, " - ", no)
+			//return shim.Success(jsonBytes)
+			
+		}else{
+			fmt.Println(PalletArr)
+			fmt.Println(BoxArr)
+			fmt.Println(PacketArr)
+			fmt.Println(ItemArr)
 			break
 		}
 
-		if err := APIstub.PutState(no, jsonBytes); err != nil {
-			generateProductLogger.Error(err.Error())
-			return shim.Error(err.Error())
-			break
-		}
+		//============================================
 
-		generateProductLogger.Infof("productType %s\n", productType, " - ", no)
-		//return shim.Success(jsonBytes)
+		
 
 		ForceSleep()
 		
