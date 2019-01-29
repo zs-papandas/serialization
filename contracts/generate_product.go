@@ -48,6 +48,9 @@ var productType string
 type GenerateProductContract struct {
 }
 
+func ForceSleep(){
+	time.Sleep(1000 * time.Millisecond)
+}
 
 //CreateProduct : save a product
 func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
@@ -154,6 +157,8 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 
 		generateProductLogger.Infof("productType %s\n", productType, " - ", no)
 		//return shim.Success(jsonBytes)
+
+		ForceSleep()
 
 		i++
 	}
