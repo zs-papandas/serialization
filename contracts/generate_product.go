@@ -133,7 +133,7 @@ func (ac *GenerateProductContract) CreateProduct(APIstub shim.ChaincodeStubInter
 			ProductTypeInt = types.UnKnownProduct
 		}
 
-		parentProduct := nil
+		parentProduct := ""
 		//"WIXnkuHMYZL5fGaE"
 		
 
