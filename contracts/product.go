@@ -416,10 +416,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
-			"product_type": types.PalletProduct,
-			"product_type": types.BoxProduct,
-			"product_type": types.PacketProduct,
-			"product_type": types.ItemProduct,
+			"product_type": 4,
 		},
 	}
 
