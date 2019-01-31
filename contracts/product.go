@@ -431,14 +431,14 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}
 	defer resultsIterator.Close()
 
-	results := make([]*models.Account, 0)
+	results := make([]*models.Product, 0)
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
 			accountLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
-		account := new(models.Account)
+		account := new(models.Product)
 		if err := json.Unmarshal(queryResponse.Value, account); err != nil {
 			accountLogger.Error(err.Error())
 			return shim.Error(err.Error())
