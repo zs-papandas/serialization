@@ -407,7 +407,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 }*/
 
 
-
+// '{"selector":{"product_type":1}}'
 // ChangeOwner : Change owner of a product.
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
@@ -424,15 +424,15 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(err.Error())
 	}
 	productLogger.Infof("Query string = '%s'", string(queryBytes))
-	/*resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
-	//resultsIterator, err := APIstub.GetQueryResult()
+	resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+	
 	if err != nil {
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
 	defer resultsIterator.Close()
 
-	results := make([]*models.Product, 0)
+	/*results := make([]*models.Product, 0)
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
