@@ -9,14 +9,6 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	sc "github.com/hyperledger/fabric/protos/peer"
-	//"github.com/hyperledger/fabric/core/scc/qscc"
-	//"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
-
-	//"github.com/golang/protobuf/proto"
-	//"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	//"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	//sdkCtx "github.com/hyperledger/fabric-sdk-go/pkg/context"
-	//"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
 
 	"github.com/zs-papandas/serialization/models"
 	"github.com/zs-papandas/serialization/types"
@@ -414,15 +406,15 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
 	//queryString := fmt.Sprintf("{\"selector\":{\"lastname\":\"Harry\",\"owner\":\"%s\"}}", owner)
-	queryString := fmt.Sprintf("{\"selector\":{\"lastname\":\"Harry\"}}")
+	/*queryString := fmt.Sprintf("{\"selector\":{\"lastname\":\"Harry\"}}")
 
 	queryResults, err := getQueryResultForQueryString(APIstub, queryString)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	return shim.Success(queryResults)
+	return shim.Success(queryResults)*/
 
-	/*query := map[string]interface{}{
+	query := map[string]interface{}{
 		"selector": map[string]interface{}{
 			"product_type": types.PalletProduct,
 		},
@@ -463,11 +455,11 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}
 	return shim.Success(jsonBytes)
 
-	return shim.Success([]byte("Reply from TestQueryInfo"))*/
+	return shim.Success([]byte("Reply from TestQueryInfo"))
 }
 
 
-func getQueryResultForQueryString(APIstub shim.ChaincodeStubInterface, queryString string) ([]byte, error) {
+/*func getQueryResultForQueryString(APIstub shim.ChaincodeStubInterface, queryString string) ([]byte, error) {
 
 	fmt.Printf("- getQueryResultForQueryString queryString:\n%s\n", queryString)
 
@@ -516,4 +508,4 @@ func constructQueryResponseFromIterator(resultsIterator shim.StateQueryIteratorI
 	buffer.WriteString("]")
 
 	return &buffer, nil
-}
+}*/
