@@ -418,13 +418,16 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		},
 	}
 
+	productLogger.Infof(query)
+
 	queryBytes, err := json.Marshal(query)
 	if err != nil {
-		accountLogger.Error(err.Error())
+		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	accountLogger.Infof("Query string = '%s'", string(queryBytes))
-	resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+	productLogger.Infof("Query string = '%s'", string(queryBytes))
+	/*resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+	//resultsIterator, err := APIstub.GetQueryResult()
 	if err != nil {
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
@@ -450,7 +453,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	return shim.Success(jsonBytes)
+	return shim.Success(jsonBytes)*/
 
-	//return shim.Success([]byte("Reply from TestQueryInfo"))
+	return shim.Success([]byte("Reply from TestQueryInfo"))
 }
