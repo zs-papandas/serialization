@@ -341,6 +341,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				}
 			}
 
+			
+
 
 		}else{
 			productLogger.Error("Inventory is Empty. Sold Out.")
@@ -380,6 +382,54 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		productLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
+
+	//=
+
+	if fromProduct.ProductType == 1 {
+		/**/
+		query := map[string]interface{}{
+			"selector": map[string]interface{}{
+				"product_type": 2,
+				"parent_product":fromProduct.ParentProduct
+			},
+		}
+		queryBytes, err := json.Marshal(query)
+		if err != nil {
+			productLogger.Error(err.Error())
+		}
+		resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+		if err != nil {
+			productLogger.Error(err.Error())
+		}
+		defer resultsIterator.Close()
+
+		for resultsIterator.HasNext() {
+			queryResponse, err := resultsIterator.Next()
+			if err != nil {
+				productLogger.Error(err.Error())
+			}
+			account := new(models.Product)
+			if err := json.Unmarshal(queryResponse.Value, account); err != nil {
+				productLogger.Error(err.Error())
+			}
+			productLogger.Infof("Got Product Detail")
+			productLogger.Infof(account)
+
+			/* to level 2*/
+		}
+
+
+	}else if fromProduct.ProductType == 2 {
+
+	}else if  fromProduct.ProductType == 3 {
+
+	}else if fromProduct.ProductType == 4 {
+
+	}else{
+
+	}
+
+	//=
 
 	return shim.Success(toProductBytes)
 		
