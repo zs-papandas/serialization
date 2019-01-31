@@ -412,7 +412,16 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
-	query := map[string]interface{}{
+	//queryString := fmt.Sprintf("{\"selector\":{\"lastname\":\"Harry\",\"owner\":\"%s\"}}", owner)
+	queryString := fmt.Sprintf("{\"selector\":{\"lastname\":\"Harry\"}}")
+
+	queryResults, err := getQueryResultForQueryString(APIstub, queryString)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(queryResults)
+
+	/*query := map[string]interface{}{
 		"selector": map[string]interface{}{
 			"product_type": types.PalletProduct,
 		},
@@ -432,7 +441,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}
 	defer resultsIterator.Close()
 
-	/*results := make([]*models.Product, 0)
+	results := make([]*models.Product, 0)
 	for resultsIterator.HasNext() {
 		queryResponse, err := resultsIterator.Next()
 		if err != nil {
@@ -451,7 +460,28 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-	return shim.Success(jsonBytes)*/
+	return shim.Success(jsonBytes)
 
-	return shim.Success([]byte("Reply from TestQueryInfo"))
+	return shim.Success([]byte("Reply from TestQueryInfo"))*/
+}
+
+
+func getQueryResultForQueryString(APIstub shim.ChaincodeStubInterface, queryString string) ([]byte, error) {
+
+	fmt.Printf("- getQueryResultForQueryString queryString:\n%s\n", queryString)
+
+	resultsIterator, err := APIstub.GetQueryResult(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	buffer, err := constructQueryResponseFromIterator(resultsIterator)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("- getQueryResultForQueryString queryResult:\n%s\n", buffer.String())
+
+	return buffer.Bytes(), nil
 }
