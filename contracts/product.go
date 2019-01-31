@@ -412,57 +412,45 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	productLogger.Infof("invoke TestQueryInfo, args=%s\n", args)
 
-	/*c, err := ledger.New(mockChannelProvider("myc")
-	if err != nil {
-		fmt.Println("failed to create client")
+	query := map[string]interface{}{
+		"selector": map[string]interface{}{
+			"product_type": types.PalletProduct,
+		},
 	}
 
-	bci, err := c.QueryInfo()
+	queryBytes, err := json.Marshal(query)
 	if err != nil {
-		fmt.Printf("failed to query for blockchain info: %s\n", err)
-	}
-
-	if bci != nil {
-		fmt.Println("Retrieved ledger info")
-	}
-
-	client, err := ledger.New(channelContext)
-	if err != nil {
-		productLogger.Error(err.Error())
+		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
-
-	block, err := client.QueryBlockByHash(blockHash)
+	accountLogger.Infof("Query string = '%s'", string(queryBytes))
+	resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
 	if err != nil {
-		productLogger.Error(err.Error())
+		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
+	defer resultsIterator.Close()
 
-	block, err = client.QueryBlock(blockNumber)
+	results := make([]*models.Account, 0)
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			accountLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		account := new(models.Account)
+		if err := json.Unmarshal(queryResponse.Value, account); err != nil {
+			accountLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		results = append(results, account)
+	}
+	jsonBytes, err := json.Marshal(results)
 	if err != nil {
-		productLogger.Error(err.Error())
+		accountLogger.Error(err.Error())
 		return shim.Error(err.Error())
 	}
+	return shim.Success(jsonBytes)
 
-
-	//res, err := qscc.Invoke([][]byte([]byte(GetChainInfo), []byte(myc)))
-	res, err := qscc.invoke("GetChainInfo", "myc")
-	if err != nil {
-		productLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-
-	
-
-	response, err := chClient.Query(chClient.Request{ChaincodeID: "qscc", Fcn: "invoke", Args: integration.ExampleCCQueryArgs("GetChainInfo")})
-
-	if err != nil {
-		productLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-
-	productLogger.Infof("PASS THE TSTs")
-	productLogger.Infof(response)*/
-
-	return shim.Success([]byte("Reply from TestQueryInfo"))
+	//return shim.Success([]byte("Reply from TestQueryInfo"))
 }
