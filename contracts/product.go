@@ -418,8 +418,6 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		},
 	}
 
-	productLogger.Infof(query)
-
 	queryBytes, err := json.Marshal(query)
 	if err != nil {
 		productLogger.Error(err.Error())
