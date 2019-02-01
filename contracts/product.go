@@ -380,51 +380,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 
 	//=
 
-	if toProduct.ProductType == 1 {
-		
-		query := map[string]interface{}{
-			"selector": map[string]interface{}{
-				"model_type": 2,
-			},
-		}
-		/*query := fmt.Sprintf("{\"selector\":{\"product_type\":2,\"parent_product\":\"%s\"}}", toProduct.ParentProduct)*/
-		//,
-		//
-		queryBytes, err := json.Marshal(query)
-		if err != nil {
-			productLogger.Error(err.Error())
-		}
-		resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
-		if err != nil {
-			productLogger.Error(err.Error())
-		}
-		defer resultsIterator.Close()
-
-		for resultsIterator.HasNext() {
-			queryResponse, err := resultsIterator.Next()
-			if err != nil {
-				productLogger.Error(err.Error())
-			}
-			/*account := new(models.Product)
-			if err := json.Unmarshal(queryResponse.Value, account); err != nil {
-				productLogger.Error(err.Error())
-			}*/
-			productLogger.Infof("============Got Product Detail===============")
-			productLogger.Infof(string(queryResponse.Value))
-
-			/* to level 2*/
-		}
-
-
-	}else if toProduct.ProductType == 2 {
-
-	}else if  toProduct.ProductType == 3 {
-
-	}else if toProduct.ProductType == 4 {
-
-	}else{
-
-	}
+	
 
 	//=
 
