@@ -393,7 +393,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				"parent_product":fromProduct.ParentProduct
 			}
 		}*/
-		query := fmt.Sprintf("{\"selector\":{\"product_type\":4,\"parent_product\":\"%s\"}}", toProduct.ParentProduct)
+		query := fmt.Sprintf("{\"selector\":{\"product_type\":2,\"parent_product\":\"%s\"}}", toProduct.ParentProduct)
 		//,
 		//
 		queryBytes, err := json.Marshal(query)
@@ -415,7 +415,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			if err := json.Unmarshal(queryResponse.Value, account); err != nil {
 				productLogger.Error(err.Error())
 			}*/
-			productLogger.Infof("Got Product Detail")
+			productLogger.Infof("============Got Product Detail===============")
 			productLogger.Infof(string(queryResponse.Value))
 
 			/* to level 2*/
