@@ -422,11 +422,11 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 
 
-	}else if fromProduct.ProductType == 2 {
+	}else if toProduct.ProductType == 2 {
 
-	}else if  fromProduct.ProductType == 3 {
+	}else if  toProduct.ProductType == 3 {
 
-	}else if fromProduct.ProductType == 4 {
+	}else if toProduct.ProductType == 4 {
 
 	}else{
 
