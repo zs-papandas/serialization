@@ -365,11 +365,6 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 	}
 
-	//productLogger.Infof("Product LotNumber")
-	//productLogger.Infof(*product.LotNumber)
-	//productLogger.Infof(toProduct.SerialId)
-	//productLogger.Infof(toOwner.Firstname)
-
 	toProduct.Owner = *toOwner
 	toProduct.Status = "OWNERSHIP_CHANGED"
 
@@ -386,14 +381,13 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	//=
 
 	if toProduct.ProductType == 1 {
-		/*
+		
 		query := map[string]interface{}{
 			"selector": map[string]interface{}{
-				"product_type": 2,
-				"parent_product":fromProduct.ParentProduct
+				"product_type": 2
 			}
-		}*/
-		query := fmt.Sprintf("{\"selector\":{\"product_type\":2,\"parent_product\":\"%s\"}}", toProduct.ParentProduct)
+		}
+		/*query := fmt.Sprintf("{\"selector\":{\"product_type\":2,\"parent_product\":\"%s\"}}", toProduct.ParentProduct)*/
 		//,
 		//
 		queryBytes, err := json.Marshal(query)
