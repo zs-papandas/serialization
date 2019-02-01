@@ -382,7 +382,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		query := map[string]interface{}{
 			"selector": map[string]interface{}{
 				"product_type": types.BoxProduct,
-				"parent_product":toProduct.ParentProduct,
+				"parent_product":toProduct.SerialId,
 			},
 		}
 	
@@ -482,6 +482,17 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(err.Error())
 	}
 	return shim.Success(queryResults)*/
+	toProduct, err := utils.GetProduct(APIstub, "T7txWduqtCDMLxiD")
+	if err != nil {
+		switch e := err.(type) {
+		case *utils.WarningResult:
+			productLogger.Warning(err.Error())
+			return shim.Success(e.JSONBytes())
+		default:
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+	}
 
 	toOwner, err := utils.GetAccount(APIstub, "b")
 	if err != nil {
@@ -498,7 +509,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
 			"product_type": 2,
-			"parent_product":"T7txWduqtCDMLxiD",
+			"parent_product":toProduct.SerialId,
 		},
 	}
 
