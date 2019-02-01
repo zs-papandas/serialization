@@ -508,7 +508,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
-			"product_type": types.boxProduct,
+			"product_type": types.BoxProduct,
 			"parent_product":toProduct.SerialId,
 		},
 	}
@@ -569,6 +569,79 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		}
 
 		//=============== outBox
+
+		////////////////////////////////
+
+		query := map[string]interface{}{
+			"selector": map[string]interface{}{
+				"product_type": types.PacketProduct,
+				"parent_product":boxProduct.SerialId,
+			},
+		}
+	
+		queryBytes, err := json.Marshal(query)
+		if err != nil {
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		productLogger.Infof("Query string = '%s'", string(queryBytes))
+		resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+		
+		if err != nil {
+			accountLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		defer resultsIterator.Close()
+	
+		for resultsIterator.HasNext() {
+			queryResponse, err := resultsIterator.Next()
+			if err != nil {
+				accountLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+			account := new(models.Product)
+			if err := json.Unmarshal(queryResponse.Value, account); err != nil {
+				accountLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+			results = append(results, account)
+
+			//================ toPacket
+	
+			packetProduct, err := utils.GetProduct(APIstub, account.SerialId)
+			if err != nil {
+				switch e := err.(type) {
+				case *utils.WarningResult:
+					productLogger.Warning(err.Error())
+					return shim.Success(e.JSONBytes())
+				default:
+					productLogger.Error(err.Error())
+					return shim.Error(err.Error())
+				}
+			}
+	
+			packetProduct.Owner = *toOwner
+			packetProduct.Status = "OWNERSHIP_CHANGED"
+	
+			packetProductBytes, err := json.Marshal(packetProduct)
+			if err != nil {
+				productLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+			if err := APIstub.PutState(packetProduct.SerialId, packetProductBytes); err != nil {
+				productLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+	
+			//=============== toPacket
+	
+			
+	
+	
+	
+		}
+
+		/////////////////////////////////
 
 
 
