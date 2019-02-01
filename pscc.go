@@ -56,7 +56,7 @@ func (t *EntryPoint) Invoke(APIstub shim.ChaincodeStubInterface) peer.Response {
 			return productContract.ChangeOwner(APIstub, args)
 		case "listProductHistory":
 			return historyContract.ListHistory(APIstub, args)
-		case "testQueryInfo":
+		case "changeChildOwner":
 			return productContract.TestQueryInfo(APIstub, args)
 		
 	}
