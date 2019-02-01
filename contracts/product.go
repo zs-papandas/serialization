@@ -482,7 +482,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		return shim.Error(err.Error())
 	}
 	return shim.Success(queryResults)*/
-	toProduct, err := utils.GetProduct(APIstub, "T7txWduqtCDMLxiD")
+	toProduct, err := utils.GetProduct(APIstub, args[0])
 	if err != nil {
 		switch e := err.(type) {
 		case *utils.WarningResult:
@@ -508,7 +508,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
-			"product_type": 2,
+			"product_type": types.boxProduct,
 			"parent_product":toProduct.SerialId,
 		},
 	}
@@ -541,9 +541,9 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 		}
 		results = append(results, account)
 
-		//================
+		//================ toBox
 
-		toProduct, err := utils.GetProduct(APIstub, account.SerialId)
+		boxProduct, err := utils.GetProduct(APIstub, account.SerialId)
 		if err != nil {
 			switch e := err.(type) {
 			case *utils.WarningResult:
@@ -555,24 +555,22 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 			}
 		}
 
-		productLogger.Infof("==========================================")
-		productLogger.Infof("==========================================")
-		productLogger.Infof("==========================================")
-		productLogger.Infof("==========================================")
-		productLogger.Infof("==========================================")
+		boxProduct.Owner = *toOwner
+		boxProduct.Status = "OWNERSHIP_CHANGED"
 
-		toProduct.Owner = *toOwner
-		toProduct.Status = "OWNERSHIP_CHANGED"
-
-		toProductBytes, err := json.Marshal(toProduct)
+		boxProductBytes, err := json.Marshal(boxProduct)
 		if err != nil {
 			productLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
-		if err := APIstub.PutState(toProduct.SerialId, toProductBytes); err != nil {
+		if err := APIstub.PutState(boxProduct.SerialId, boxProductBytes); err != nil {
 			productLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
+
+		//=============== outBox
+
+
 
 	}
 	jsonBytes, err := json.Marshal(results)
