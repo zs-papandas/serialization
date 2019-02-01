@@ -378,9 +378,50 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		return shim.Error(err.Error())
 	}
 
-	//=
+	productLogger.Infof("toProduct.ProductType, args=%s\n", toProduct.ProductType)
 
+	if toProduct.ProductType == types.PalletProduct {
+		
+		query := map[string]interface{}{
+			"selector": map[string]interface{}{
+				"product_type": 2,
+			},
+		}
 	
+		queryBytes, err := json.Marshal(query)
+		if err != nil {
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		productLogger.Infof("Query string = '%s'", string(queryBytes))
+		resultsIterator, err := APIstub.GetQueryResult(string(queryBytes))
+		
+		if err != nil {
+			accountLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		defer resultsIterator.Close()
+	
+		results := make([]*models.Product, 0)
+		for resultsIterator.HasNext() {
+			queryResponse, err := resultsIterator.Next()
+			if err != nil {
+				accountLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+			productLogger.Infof("=================================")
+			productLogger.Infof("Query Response = '%s'", string(queryResponse.Value))
+			fmt.Println(queryResponse.Value)
+		}
+
+
+	}else if toProduct.ProductType == types.BoxProduct {
+
+	}else if  toProduct.ProductType == types.PacketProduct {
+
+	}else{
+
+	}
 
 	//=
 
