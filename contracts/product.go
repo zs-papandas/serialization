@@ -393,6 +393,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				"parent_product":fromProduct.ParentProduct
 			}
 		}
+		//,
+		//
 		queryBytes, err := json.Marshal(query)
 		if err != nil {
 			productLogger.Error(err.Error())
