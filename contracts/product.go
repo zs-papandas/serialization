@@ -457,6 +457,18 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}
 	return shim.Success(queryResults)*/
 
+	toOwner, err := utils.GetAccount(APIstub, "b")
+	if err != nil {
+		switch e := err.(type) {
+		case *utils.WarningResult:
+			productLogger.Warning(err.Error())
+			return shim.Success(e.JSONBytes())
+		default:
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+	}
+
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
 			"product_type": 2,
@@ -490,6 +502,40 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 			return shim.Error(err.Error())
 		}
 		results = append(results, account)
+
+		//================
+
+		toProduct, err := utils.GetProduct(APIstub, account.SerialId)
+		if err != nil {
+			switch e := err.(type) {
+			case *utils.WarningResult:
+				productLogger.Warning(err.Error())
+				return shim.Success(e.JSONBytes())
+			default:
+				productLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+		}
+
+		productLogger.Infof("==========================================")
+		productLogger.Infof("==========================================")
+		productLogger.Infof("==========================================")
+		productLogger.Infof("==========================================")
+		productLogger.Infof("==========================================")
+
+		toProduct.Owner = *toOwner
+		toProduct.Status = "OWNERSHIP_CHANGED"
+
+		toProductBytes, err := json.Marshal(toProduct)
+		if err != nil {
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+		if err := APIstub.PutState(toProduct.SerialId, toProductBytes); err != nil {
+			productLogger.Error(err.Error())
+			return shim.Error(err.Error())
+		}
+
 	}
 	jsonBytes, err := json.Marshal(results)
 	if err != nil {
@@ -498,7 +544,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 	}
 	return shim.Success(jsonBytes)
 
-	return shim.Success([]byte("Reply from TestQueryInfo"))
+	//return shim.Success([]byte("Reply from TestQueryInfo"))
 }
 
 
