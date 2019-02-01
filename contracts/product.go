@@ -350,9 +350,6 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 	} 
 	
-	
-	
-
 	toOwner, err := utils.GetAccount(APIstub, args[1])
 	if err != nil {
 		switch e := err.(type) {
@@ -378,13 +375,14 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		return shim.Error(err.Error())
 	}
 
-	productLogger.Infof("toProduct.ProductType, args=%s\n", toProduct.ProductType)
+	//productLogger.Infof("toProduct.ProductType, args=%s\n", toProduct.ProductType)
 
 	if toProduct.ProductType == types.PalletProduct {
 		
 		query := map[string]interface{}{
 			"selector": map[string]interface{}{
-				"product_type": 2,
+				"product_type": types.BoxProduct,
+				"parent_product":toProduct.ParentProduct,
 			},
 		}
 	
@@ -402,17 +400,45 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 		defer resultsIterator.Close()
 	
+		
 		for resultsIterator.HasNext() {
 			queryResponse, err := resultsIterator.Next()
 			if err != nil {
 				accountLogger.Error(err.Error())
 				return shim.Error(err.Error())
 			}
-			productLogger.Infof("=================================")
-			productLogger.Infof("Query Response = '%s'", string(queryResponse.Value))
-			fmt.Println(queryResponse.Value)
+			account := new(models.Product)
+			if err := json.Unmarshal(queryResponse.Value, account); err != nil {
+				accountLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+			
+			toProduct, err := utils.GetProduct(APIstub, account.SerialId)
+			if err != nil {
+				switch e := err.(type) {
+				case *utils.WarningResult:
+					productLogger.Warning(err.Error())
+					return shim.Success(e.JSONBytes())
+				default:
+					productLogger.Error(err.Error())
+					return shim.Error(err.Error())
+				}
+			}
+	
+			toProduct.Owner = *toOwner
+			toProduct.Status = "OWNERSHIP_CHANGED"
+	
+			toProductBytes, err := json.Marshal(toProduct)
+			if err != nil {
+				productLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+			if err := APIstub.PutState(toProduct.SerialId, toProductBytes); err != nil {
+				productLogger.Error(err.Error())
+				return shim.Error(err.Error())
+			}
+	
 		}
-
 
 	}else if toProduct.ProductType == types.BoxProduct {
 
