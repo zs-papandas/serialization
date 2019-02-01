@@ -384,8 +384,8 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		
 		query := map[string]interface{}{
 			"selector": map[string]interface{}{
-				"product_type": 2
-			}
+				"model_type": 2,
+			},
 		}
 		/*query := fmt.Sprintf("{\"selector\":{\"product_type\":2,\"parent_product\":\"%s\"}}", toProduct.ParentProduct)*/
 		//,
