@@ -386,13 +386,14 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 	//=
 
 	if fromProduct.ProductType == 1 {
-		/**/
+		/*
 		query := map[string]interface{}{
 			"selector": map[string]interface{}{
 				"product_type": 2,
 				"parent_product":fromProduct.ParentProduct
 			}
-		}
+		}*/
+		query := fmt.Sprintf("{\"selector\":{\"product_type\":4,\"parent_product\":\"%s\"}}", fromProduct.ParentProduct)
 		//,
 		//
 		queryBytes, err := json.Marshal(query)
