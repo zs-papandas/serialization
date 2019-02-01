@@ -411,12 +411,12 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 			if err != nil {
 				productLogger.Error(err.Error())
 			}
-			account := new(models.Product)
+			/*account := new(models.Product)
 			if err := json.Unmarshal(queryResponse.Value, account); err != nil {
 				productLogger.Error(err.Error())
-			}
+			}*/
 			productLogger.Infof("Got Product Detail")
-			productLogger.Infof(string(&account))
+			productLogger.Infof(string(queryResponse.Value))
 
 			/* to level 2*/
 		}
