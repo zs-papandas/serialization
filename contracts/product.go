@@ -416,7 +416,7 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 				productLogger.Error(err.Error())
 			}
 			productLogger.Infof("Got Product Detail")
-			productLogger.Infof(account)
+			productLogger.Infof(string(&account))
 
 			/* to level 2*/
 		}
