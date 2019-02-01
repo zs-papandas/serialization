@@ -508,114 +508,45 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 
 	results := make([]*models.Product, 0)
 
-	if toProduct.ProductType == types.BoxProduct {
+	if toProduct.ProductType == types.PalletProduct {
 
-
-
-	}
-
-	queryBox := map[string]interface{}{
-		"selector": map[string]interface{}{
-			"product_type": types.BoxProduct,
-			"parent_product":toProduct.SerialId,
-		},
-	}
-
-	queryBytesBox, err := json.Marshal(queryBox)
-	if err != nil {
-		productLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-	
-	resultsIteratorBox, err := APIstub.GetQueryResult(string(queryBytesBox))
-	
-	if err != nil {
-		accountLogger.Error(err.Error())
-		return shim.Error(err.Error())
-	}
-	defer resultsIteratorBox.Close()
-
-	for resultsIteratorBox.HasNext() {
-		queryResponseBox, err := resultsIteratorBox.Next()
-		if err != nil {
-			accountLogger.Error(err.Error())
-			return shim.Error(err.Error())
-		}
-		productBox := new(models.Product)
-		if err := json.Unmarshal(queryResponseBox.Value, productBox); err != nil {
-			accountLogger.Error(err.Error())
-			return shim.Error(err.Error())
-		}
-		results = append(results, productBox)
-
-		//================ toBox
-
-		boxProduct, err := utils.GetProduct(APIstub, productBox.SerialId)
-		if err != nil {
-			switch e := err.(type) {
-			case *utils.WarningResult:
-				productLogger.Warning(err.Error())
-				return shim.Success(e.JSONBytes())
-			default:
-				productLogger.Error(err.Error())
-				return shim.Error(err.Error())
-			}
-		}
-
-		boxProduct.Owner = *toOwner
-		boxProduct.Status = "OWNERSHIP_CHANGED"
-
-		boxProductBytes, err := json.Marshal(boxProduct)
-		if err != nil {
-			productLogger.Error(err.Error())
-			return shim.Error(err.Error())
-		}
-		if err := APIstub.PutState(boxProduct.SerialId, boxProductBytes); err != nil {
-			productLogger.Error(err.Error())
-			return shim.Error(err.Error())
-		}
-
-		//=============== outBox
-
-		////////////////////////////////
-
-		queryPacket := map[string]interface{}{
+		queryBox := map[string]interface{}{
 			"selector": map[string]interface{}{
-				"product_type": types.PacketProduct,
-				"parent_product":boxProduct.SerialId,
+				"product_type": types.BoxProduct,
+				"parent_product":toProduct.SerialId,
 			},
 		}
 	
-		queryBytes, err := json.Marshal(queryPacket)
+		queryBytesBox, err := json.Marshal(queryBox)
 		if err != nil {
 			productLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
-		productLogger.Infof("Query string = '%s'", string(queryBytes))
-		resultsIteratorPacket, err := APIstub.GetQueryResult(string(queryBytes))
+		
+		resultsIteratorBox, err := APIstub.GetQueryResult(string(queryBytesBox))
 		
 		if err != nil {
 			accountLogger.Error(err.Error())
 			return shim.Error(err.Error())
 		}
-		defer resultsIteratorPacket.Close()
+		defer resultsIteratorBox.Close()
 	
-		for resultsIteratorPacket.HasNext() {
-			queryResponsePacket, err := resultsIteratorPacket.Next()
+		for resultsIteratorBox.HasNext() {
+			queryResponseBox, err := resultsIteratorBox.Next()
 			if err != nil {
 				accountLogger.Error(err.Error())
 				return shim.Error(err.Error())
 			}
-			productPacket := new(models.Product)
-			if err := json.Unmarshal(queryResponsePacket.Value, productPacket); err != nil {
+			productBox := new(models.Product)
+			if err := json.Unmarshal(queryResponseBox.Value, productBox); err != nil {
 				accountLogger.Error(err.Error())
 				return shim.Error(err.Error())
 			}
-			results = append(results, productPacket)
-
-			//================ toPacket
+			results = append(results, productBox)
 	
-			packetProduct, err := utils.GetProduct(APIstub, productPacket.SerialId)
+			//================ toBox
+	
+			boxProduct, err := utils.GetProduct(APIstub, productBox.SerialId)
 			if err != nil {
 				switch e := err.(type) {
 				case *utils.WarningResult:
@@ -627,60 +558,60 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 				}
 			}
 	
-			packetProduct.Owner = *toOwner
-			packetProduct.Status = "OWNERSHIP_CHANGED"
+			boxProduct.Owner = *toOwner
+			boxProduct.Status = "OWNERSHIP_CHANGED"
 	
-			packetProductBytes, err := json.Marshal(packetProduct)
+			boxProductBytes, err := json.Marshal(boxProduct)
 			if err != nil {
 				productLogger.Error(err.Error())
 				return shim.Error(err.Error())
 			}
-			if err := APIstub.PutState(packetProduct.SerialId, packetProductBytes); err != nil {
+			if err := APIstub.PutState(boxProduct.SerialId, boxProductBytes); err != nil {
 				productLogger.Error(err.Error())
 				return shim.Error(err.Error())
 			}
 	
-			//=============== toPacket
+			//=============== outBox
 	
-			//////////////// ITEM ///////////////////
-
-			queryItem := map[string]interface{}{
+			////////////////////////////////
+	
+			queryPacket := map[string]interface{}{
 				"selector": map[string]interface{}{
-					"product_type": types.ItemProduct,
-					"parent_product":packetProduct.SerialId,
+					"product_type": types.PacketProduct,
+					"parent_product":boxProduct.SerialId,
 				},
 			}
 		
-			queryBytes, err := json.Marshal(queryItem)
+			queryBytes, err := json.Marshal(queryPacket)
 			if err != nil {
 				productLogger.Error(err.Error())
 				return shim.Error(err.Error())
 			}
 			productLogger.Infof("Query string = '%s'", string(queryBytes))
-			resultsIteratorItem, err := APIstub.GetQueryResult(string(queryBytes))
+			resultsIteratorPacket, err := APIstub.GetQueryResult(string(queryBytes))
 			
 			if err != nil {
 				accountLogger.Error(err.Error())
 				return shim.Error(err.Error())
 			}
-			defer resultsIteratorItem.Close()
+			defer resultsIteratorPacket.Close()
 		
-			for resultsIteratorItem.HasNext() {
-				queryResponseItem, err := resultsIteratorItem.Next()
+			for resultsIteratorPacket.HasNext() {
+				queryResponsePacket, err := resultsIteratorPacket.Next()
 				if err != nil {
 					accountLogger.Error(err.Error())
 					return shim.Error(err.Error())
 				}
-				productItem := new(models.Product)
-				if err := json.Unmarshal(queryResponseItem.Value, productItem); err != nil {
+				productPacket := new(models.Product)
+				if err := json.Unmarshal(queryResponsePacket.Value, productPacket); err != nil {
 					accountLogger.Error(err.Error())
 					return shim.Error(err.Error())
 				}
-				results = append(results, productItem)
+				results = append(results, productPacket)
 	
 				//================ toPacket
 		
-				itemProduct, err := utils.GetProduct(APIstub, productItem.SerialId)
+				packetProduct, err := utils.GetProduct(APIstub, productPacket.SerialId)
 				if err != nil {
 					switch e := err.(type) {
 					case *utils.WarningResult:
@@ -692,33 +623,102 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 					}
 				}
 		
-				itemProduct.Owner = *toOwner
-				itemProduct.Status = "OWNERSHIP_CHANGED"
+				packetProduct.Owner = *toOwner
+				packetProduct.Status = "OWNERSHIP_CHANGED"
 		
-				itemProductBytes, err := json.Marshal(itemProduct)
+				packetProductBytes, err := json.Marshal(packetProduct)
 				if err != nil {
 					productLogger.Error(err.Error())
 					return shim.Error(err.Error())
 				}
-				if err := APIstub.PutState(itemProduct.SerialId, itemProductBytes); err != nil {
+				if err := APIstub.PutState(packetProduct.SerialId, packetProductBytes); err != nil {
 					productLogger.Error(err.Error())
 					return shim.Error(err.Error())
-				
 				}
-
-				// END ITEM
+		
+				//=============== toPacket
+		
+				//////////////// ITEM ///////////////////
+	
+				queryItem := map[string]interface{}{
+					"selector": map[string]interface{}{
+						"product_type": types.ItemProduct,
+						"parent_product":packetProduct.SerialId,
+					},
+				}
+			
+				queryBytes, err := json.Marshal(queryItem)
+				if err != nil {
+					productLogger.Error(err.Error())
+					return shim.Error(err.Error())
+				}
+				productLogger.Infof("Query string = '%s'", string(queryBytes))
+				resultsIteratorItem, err := APIstub.GetQueryResult(string(queryBytes))
+				
+				if err != nil {
+					accountLogger.Error(err.Error())
+					return shim.Error(err.Error())
+				}
+				defer resultsIteratorItem.Close()
+			
+				for resultsIteratorItem.HasNext() {
+					queryResponseItem, err := resultsIteratorItem.Next()
+					if err != nil {
+						accountLogger.Error(err.Error())
+						return shim.Error(err.Error())
+					}
+					productItem := new(models.Product)
+					if err := json.Unmarshal(queryResponseItem.Value, productItem); err != nil {
+						accountLogger.Error(err.Error())
+						return shim.Error(err.Error())
+					}
+					results = append(results, productItem)
+		
+					//================ toPacket
+			
+					itemProduct, err := utils.GetProduct(APIstub, productItem.SerialId)
+					if err != nil {
+						switch e := err.(type) {
+						case *utils.WarningResult:
+							productLogger.Warning(err.Error())
+							return shim.Success(e.JSONBytes())
+						default:
+							productLogger.Error(err.Error())
+							return shim.Error(err.Error())
+						}
+					}
+			
+					itemProduct.Owner = *toOwner
+					itemProduct.Status = "OWNERSHIP_CHANGED"
+			
+					itemProductBytes, err := json.Marshal(itemProduct)
+					if err != nil {
+						productLogger.Error(err.Error())
+						return shim.Error(err.Error())
+					}
+					if err := APIstub.PutState(itemProduct.SerialId, itemProductBytes); err != nil {
+						productLogger.Error(err.Error())
+						return shim.Error(err.Error())
+					
+					}
+	
+					// END ITEM
+			
+				}
+	
+		
+				//END PACKET
 		
 			}
-
 	
-			//END PACKET
+			//END BOX
+	
 	
 		}
 
-		//END BOX
-
-
 	}
+
+	
 	jsonBytes, err := json.Marshal(results)
 	if err != nil {
 		accountLogger.Error(err.Error())
