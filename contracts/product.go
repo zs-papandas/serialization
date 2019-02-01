@@ -402,7 +402,6 @@ func (ac *ProductContract) ChangeOwner(APIstub shim.ChaincodeStubInterface, args
 		}
 		defer resultsIterator.Close()
 	
-		results := make([]*models.Product, 0)
 		for resultsIterator.HasNext() {
 			queryResponse, err := resultsIterator.Next()
 			if err != nil {
