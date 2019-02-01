@@ -419,7 +419,7 @@ func (ac *ProductContract) TestQueryInfo(APIstub shim.ChaincodeStubInterface, ar
 
 	query := map[string]interface{}{
 		"selector": map[string]interface{}{
-			"product_type": 4,
+			"product_type": 2,
 		},
 	}
 
